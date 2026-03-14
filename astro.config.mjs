@@ -9,8 +9,12 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
     site: "https://owais.dev",
+    base: "/",
     integrations: [mdx(), sitemap(), react()],
     viewTransitions: false,
+    build: {
+        assets: "assets",
+    },
 
     vite: {
         plugins: [tailwindcss()],
