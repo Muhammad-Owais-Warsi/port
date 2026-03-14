@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "../FormattedDate.astro";
+import { FiArrowUpRight } from "react-icons/fi";
+
+interface Props {
+    posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ol class="space-y-6">
+    {
+        posts.map((post, index) => (
+            <li class="flex items-start gap-4">
+                <a href={`/blog/${post.id}/`} class="group flex-1">
+                    <h3 class="flex items-center gap-2 text-lg font-semibold text-foreground group-hover:text-primary">
+                        <span>{post.data.title}</span>
+                        <FiArrowUpRight class="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                    </h3>
+                    <p class="text-sm text-muted-foreground">
+                        <FormattedDate date={post.data.pubDate} />
+                    </p>
+                </a>
+            </li>
+        ))
+    }
+</ol>

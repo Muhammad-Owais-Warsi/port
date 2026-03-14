@@ -1,0 +1,44 @@
+---
+interface Props {
+    heading?: string;
+}
+
+const { heading = "About Me" } = Astro.props;
+---
+
+<section id="about" class="py-16 px-6">
+    <div class="mx-auto max-w-3xl">
+        <h2
+            class="text-4xl font-bold tracking-tight text-foreground mb-10 font-mono"
+        >
+            {heading}
+        </h2>
+
+        <div
+            class="space-y-8 text-lg sm:text-xl leading-relaxed text-foreground"
+        >
+            <p>
+                I'm currently a 3rd year student pursuing my Bachelors degree.
+                <span class="font-bold"
+                    >From hating C.S. every second to spending hours on my
+                    laptop 😅.</span
+                >
+            </p>
+
+            <p>
+                Honestly, it's not a motivational line to start with, but
+                <span class="font-bold"
+                    >I love building projects, exploring new tech, and
+                    collaborating with others.</span
+                >
+            </p>
+
+            <p>
+                That's all, nothing too special. Maybe I'm building and shipping
+                while you're reading this.
+            </p>
+
+            <p>Thanks a lot for reading! 😊</p>
+        </div>
+    </div>
+</section>

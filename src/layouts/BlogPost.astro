@@ -1,86 +1,63 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import SiteLayout from "./SiteLayout.astro";
+import blogFallbackImage from "../assets/og-blog.png";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const ogImage = heroImage ?? blogFallbackImage;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
-
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+<SiteLayout
+    title={title}
+    description={description}
+    image={ogImage}
+    ogType="article"
+    isBlog={true}
+>
+    <article class="px-4 pb-16 pt-8">
+        <div class="mx-auto w-full max-w-4xl">
+            {
+                heroImage && (
+                    <Image
+                        width={1020}
+                        height={510}
+                        src={heroImage}
+                        alt="blog-image"
+                        class="w-full rounded-2xl object-cover shadow-sm"
+                    />
+                )
+            }
+        </div>
+        <div
+            class="mx-auto w-full max-w-2xl px-0 sm:px-4 pt-8 text-foreground/80"
+        >
+            <div class="mb-6 text-center">
+                <p class="text-sm text-muted-foreground">
+                    <FormattedDate date={pubDate} />
+                </p>
+                {
+                    updatedDate && (
+                        <p class="mt-1 text-xs italic text-muted-foreground/80">
+                            Last updated on <FormattedDate date={updatedDate} />
+                        </p>
+                    )
+                }
+                <h1
+                    class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight text-foreground"
+                >
+                    {title}
+                </h1>
+                <hr class="mt-6 border-border" />
+            </div>
+            <div
+                class="prose prose-neutral max-w-none [&_img]:mx-auto [&_img]:my-4"
+            >
+                <slot />
+            </div>
+        </div>
+    </article>
+</SiteLayout>

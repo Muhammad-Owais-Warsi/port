@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "../FormattedDate.astro";
+
+interface Props {
+    post: CollectionEntry<"blog">;
+    isFeatured?: boolean;
+}
+
+const { post, isFeatured = false } = Astro.props;
+---
+
+<li
+    class:list={["w-full", "sm:w-1/2", { "sm:w-full text-center": isFeatured }]}
+>
+    <a href={`/blog/${post.id}/`} class="group block">
+        {
+            post.data.heroImage && (
+                <Image
+                    width={720}
+                    height={360}
+                    src={post.data.heroImage}
+                    alt=""
+                    class:list={["mb-2 rounded-xl", { "w-full": isFeatured }]}
+                />
+            )
+        }
+        <h4
+            class:list={[
+                "text-lg font-semibold text-foreground",
+                "group-hover:text-primary",
+                { "text-3xl": isFeatured },
+            ]}
+        >
+            {post.data.title}
+        </h4>
+        <p class="text-sm text-muted-foreground">
+            {post.data.updatedDate ? "Updated " : ""}
+            <FormattedDate date={post.data.updatedDate ?? post.data.pubDate} />
+        </p>
+    </a>
+</li>

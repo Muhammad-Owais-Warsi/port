@@ -1,0 +1,124 @@
+---
+import { FiArrowUpRight } from "react-icons/fi";
+
+interface Project {
+    name: string;
+    description: string;
+    url: string;
+    stack: string[];
+    launched?: boolean;
+    launched_url?: string;
+    launched_position?: string;
+}
+
+const PROJECTS: Project[] = [
+    {
+        name: "Better Pay",
+        description: "The payment layer for modern applications.",
+        url: "https://github.com/Muhammad-Owais-Warsi/Better-Pay",
+        stack: ["Typescript"],
+        launched: true,
+        launched_url: "https://peerlist.io/owais786/project/better-pay",
+        launched_position: "#1",
+    },
+    {
+        name: "Flux",
+        description: "Postman alternative built in Rust.",
+        url: "https://github.com/Muhammad-Owais-Warsi/flux",
+        stack: ["ReactJS", "Rust"],
+        launched: true,
+        launched_url: "https://peerlist.io/owais786/project/flux",
+        launched_position: "#2",
+    },
+    {
+        name: "ChimpType",
+        description: "Race your friends. Type like a chimp. 1 v 1 MonkeyType.",
+        url: "https://github.com/deboneil07/ChimpType",
+        stack: ["ReactJS", "ExpressJS", "Pusher", "Supabase", "TailwindCSS"],
+        launched: true,
+        launched_url: "https://peerlist.io/neils/project/chimptype",
+        launched_position: "#3",
+    },
+    {
+        name: "zurl",
+        description: "A faster, simpler curl alternative — built in Rust.",
+        url: "https://github.com/Muhammad-Owais-Warsi/zurl",
+        stack: ["Rust"],
+        launched: true,
+        launched_url: "https://peerlist.io/owais786/project/zurl",
+        launched_position: "#5",
+    },
+    {
+        name: "Dodo Payments Rust SDK",
+        description: "Rust SDK to interact with Dodo Payments api.",
+        url: "https://github.com/Muhammad-Owais-Warsi/dodpayments_rust_sdk",
+        stack: ["Rust"],
+    },
+];
+
+// Simple helper for the pinging ball colors
+const getStatusColor = (pos?: string) => {
+    if (pos === "#1") return "bg-yellow-500";
+    if (pos === "#2") return "bg-zinc-400";
+    if (pos === "#3") return "bg-amber-600";
+    return "bg-emerald-500";
+};
+---
+
+<section id="projects" class="py-12 px-6">
+    <div class="mx-auto max-w-3xl">
+        <h2 class="text-3xl font-bold tracking-tight text-foreground mb-8">
+            Projects
+        </h2>
+
+        <div class="space-y-10">
+            {
+                PROJECTS.map((project) => (
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <a
+                                href={project.url}
+                                target="_blank"
+                                class="group inline-flex items-center gap-2 text-lg font-semibold text-foreground hover:text-primary"
+                            >
+                                <span>{project.name}</span>
+                                <FiArrowUpRight class="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                            </a>
+                        </div>
+
+                        <p class="text-foreground/80 text-base leading-snug">
+                            {project.description}
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                            <span class="font-medium text-muted-foreground/70">
+                                Tech Stack:
+                            </span>
+                            {project.stack.map((tech) => (
+                                <span class="rounded-full border border-border px-2 py-0.5 text-[11px] font-medium text-foreground/80">
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+
+                        {project.launched_position && (
+                            <div class="flex items-center gap-2 mt-1">
+                                <span
+                                    class={`inline-flex h-2 w-2 rounded-full ${getStatusColor(project.launched_position)}`}
+                                />
+                                <a
+                                    href={project.launched_url}
+                                    target="_blank"
+                                    class="text-xs font-semibold text-muted-foreground hover:text-primary"
+                                >
+                                    Launched on Peerlist{" "}
+                                    {project.launched_position}
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
