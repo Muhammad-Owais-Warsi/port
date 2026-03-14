@@ -1,7 +1,6 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import Dock from "@/components/ui/dock";
-import { ModeToggle } from "@/components/ui/theme-toggle"; // Adjust path if file name is different
 
 const isBlogRoute = Astro.url.pathname.startsWith("/blog");
 ---
@@ -20,10 +19,6 @@ const isBlogRoute = Astro.url.pathname.startsWith("/blog");
             >
                 Blogs
             </HeaderLink>
-        </div>
-
-        <div class="absolute right-4 flex items-center">
-            <!-- <ModeToggle client:load /> -->
         </div>
     </nav>
 </header>

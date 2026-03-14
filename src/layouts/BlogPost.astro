@@ -7,13 +7,13 @@ import blogFallbackImage from "../assets/og-blog.png";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, pubDate, updatedDate, heroImage } = Astro.props;
 const ogImage = heroImage ?? blogFallbackImage;
 ---
 
 <SiteLayout
-    title={title}
-    description={description}
+    title="Owais | Blogs"
+    description="Blog site"
     image={ogImage}
     ogType="article"
     isBlog={true}

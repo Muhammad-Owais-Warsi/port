@@ -10,6 +10,7 @@ import react from "@astrojs/react";
 export default defineConfig({
     site: "https://example.com",
     integrations: [mdx(), sitemap(), react()],
+    viewTransitions: false,
 
     vite: {
         plugins: [tailwindcss()],

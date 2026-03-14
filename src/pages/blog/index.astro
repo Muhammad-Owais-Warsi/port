@@ -10,8 +10,8 @@ const posts = (await getCollection("blog")).sort(
         (a.data.updatedDate ?? a.data.pubDate).valueOf(),
 );
 
-const pageTitle = `Blogs`;
-const pageDescription = "Blogs";
+const pageTitle = `Owais | Blogs`;
+const pageDescription = "Blog site";
 ---
 
 <SiteLayout title={pageTitle} description={pageDescription} isBlog={true}>
