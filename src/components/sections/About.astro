@@ -6,16 +6,16 @@ interface Props {
 const { heading = "About Me" } = Astro.props;
 ---
 
-<section id="about" class="py-16 px-6">
+<section id="about" class="py-10 sm:py-16 px-4 sm:px-6">
     <div class="mx-auto max-w-3xl">
         <h2
-            class="text-4xl font-bold tracking-tight text-foreground mb-10 font-mono"
+            class="text-2xl sm:text-4xl font-bold tracking-tight text-foreground mb-6 sm:mb-10 font-mono"
         >
             {heading}
         </h2>
 
         <div
-            class="space-y-8 text-lg sm:text-xl leading-relaxed text-foreground"
+            class="space-y-6 sm:space-y-8 text-base sm:text-xl leading-relaxed text-foreground"
         >
             <p>
                 I'm currently a 3rd year student pursuing my Bachelors degree.

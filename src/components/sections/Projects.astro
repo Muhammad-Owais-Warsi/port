@@ -65,13 +65,13 @@ const getStatusColor = (pos?: string) => {
 };
 ---
 
-<section id="projects" class="py-12 px-6">
+<section id="projects" class="py-10 sm:py-12 px-4 sm:px-6">
     <div class="mx-auto max-w-3xl">
-        <h2 class="text-3xl font-bold tracking-tight text-foreground mb-8">
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-6 sm:mb-8">
             Projects
         </h2>
 
-        <div class="space-y-10">
+        <div class="space-y-8 sm:space-y-10">
             {
                 PROJECTS.map((project) => (
                     <div class="flex flex-col gap-2">
@@ -79,7 +79,7 @@ const getStatusColor = (pos?: string) => {
                             <a
                                 href={project.url}
                                 target="_blank"
-                                class="group inline-flex items-center gap-2 text-lg font-semibold text-foreground hover:text-primary"
+                                class="group inline-flex items-center gap-2 text-base sm:text-lg font-semibold text-foreground hover:text-primary"
                             >
                                 <span>{project.name}</span>
                                 <FiArrowUpRight class="h-4 w-4 text-muted-foreground group-hover:text-primary" />

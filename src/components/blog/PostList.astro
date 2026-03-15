@@ -10,12 +10,12 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<ol class="space-y-6">
+<ol class="space-y-4 sm:space-y-6">
     {
         posts.map((post, index) => (
-            <li class="flex items-start gap-4">
+            <li class="flex items-start gap-3 sm:gap-4">
                 <a href={`/blog/${post.id}/`} class="group flex-1">
-                    <h3 class="flex items-center gap-2 text-lg font-semibold text-foreground group-hover:text-primary">
+                    <h3 class="flex items-center gap-2 text-base sm:text-lg font-semibold text-foreground group-hover:text-primary">
                         <span>{post.data.title}</span>
                         <FiArrowUpRight class="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                     </h3>

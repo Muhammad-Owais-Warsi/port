@@ -28,9 +28,9 @@ const { post, isFeatured = false } = Astro.props;
         }
         <h4
             class:list={[
-                "text-lg font-semibold text-foreground",
+                "text-base sm:text-lg font-semibold text-foreground",
                 "group-hover:text-primary",
-                { "text-3xl": isFeatured },
+                { "sm:text-3xl text-2xl": isFeatured },
             ]}
         >
             {post.data.title}

@@ -18,7 +18,7 @@ const ogImage = heroImage ?? blogFallbackImage;
     ogType="article"
     isBlog={true}
 >
-    <article class="px-4 pb-16 pt-8">
+    <article class="px-3 sm:px-4 pb-10 sm:pb-16 pt-6 sm:pt-8">
         <div class="mx-auto w-full max-w-4xl">
             {
                 heroImage && (
@@ -27,16 +27,16 @@ const ogImage = heroImage ?? blogFallbackImage;
                         height={510}
                         src={heroImage}
                         alt="blog-image"
-                        class="w-full rounded-2xl object-cover shadow-sm"
+                        class="w-full rounded-xl sm:rounded-2xl object-cover shadow-sm"
                     />
                 )
             }
         </div>
         <div
-            class="mx-auto w-full max-w-2xl px-0 sm:px-4 pt-8 text-foreground/80"
+            class="mx-auto w-full max-w-2xl px-2 sm:px-4 pt-6 sm:pt-8 text-foreground/80"
         >
-            <div class="mb-6 text-center">
-                <p class="text-sm text-muted-foreground">
+            <div class="mb-4 sm:mb-6 text-center">
+                <p class="text-xs sm:text-sm text-muted-foreground">
                     <FormattedDate date={pubDate} />
                 </p>
                 {
@@ -47,17 +47,39 @@ const ogImage = heroImage ?? blogFallbackImage;
                     )
                 }
                 <h1
-                    class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight text-foreground"
+                    class="mt-3 sm:mt-4 text-2xl sm:text-4xl font-semibold tracking-tight text-foreground"
                 >
                     {title}
                 </h1>
                 <hr class="mt-6 border-border" />
             </div>
             <div
-                class="prose prose-neutral max-w-none [&_img]:mx-auto [&_img]:my-4"
+                class="prose prose-neutral max-w-none [&_img]:mx-auto [&_img]:my-4 [&_pre]:relative"
             >
                 <slot />
             </div>
         </div>
     </article>
+    <script>
+        document.querySelectorAll(".prose pre").forEach((pre) => {
+            if (pre.querySelector(".copy-btn")) return;
+            const btn = document.createElement("button");
+            btn.className = "copy-btn absolute top-2 right-2 p-1.5 rounded-md bg-muted hover:bg-muted/80 text-muted-foreground transition-colors";
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+            btn.title = "Copy code";
+            pre.appendChild(btn);
+            btn.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                const code = pre.querySelector("code");
+                const text = code?.innerText || "";
+                await navigator.clipboard.writeText(text);
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+                btn.classList.add("text-green-500");
+                setTimeout(() => {
+                    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+                    btn.classList.remove("text-green-500");
+                }, 2000);
+            });
+        });
+    </script>
 </SiteLayout>
