@@ -2,22 +2,15 @@
 import type { ImageMetadata } from "astro";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
-import generalOgImage from "../assets/og.png";
-import blogOgImage from "../assets/og-blog.png";
 
 interface Props {
     title: string;
     description: string;
-    image?: ImageMetadata;
+    image?: string | ImageMetadata;
     ogType?: "website" | "article";
-    isBlog?: boolean;
 }
 
-const { title, description, image, ogType = "website", isBlog = false } = Astro.props;
-
-// Determine which fallback image to use
-const fallbackImage = isBlog ? blogOgImage : generalOgImage;
-const finalImage = image ?? fallbackImage;
+const { title, description, image, ogType = "website" } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,7 +19,7 @@ const finalImage = image ?? fallbackImage;
         <BaseHead
             title={title}
             description={description}
-            image={finalImage}
+            image={image}
             ogType={ogType}
         />
     </head>

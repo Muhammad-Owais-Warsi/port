@@ -3,12 +3,11 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
 import SiteLayout from "./SiteLayout.astro";
-import blogFallbackImage from "../assets/og-blog.png";
 
 type Props = CollectionEntry<"blog">["data"];
 
 const { title, pubDate, updatedDate, heroImage } = Astro.props;
-const ogImage = heroImage ?? blogFallbackImage;
+const ogImage = heroImage ? heroImage : "/og-blog.png";
 ---
 
 <SiteLayout
@@ -16,7 +15,6 @@ const ogImage = heroImage ?? blogFallbackImage;
     description="Blog site"
     image={ogImage}
     ogType="article"
-    isBlog={true}
 >
     <article class="px-3 sm:px-4 pb-10 sm:pb-16 pt-6 sm:pt-8">
         <div class="mx-auto w-full max-w-4xl">
