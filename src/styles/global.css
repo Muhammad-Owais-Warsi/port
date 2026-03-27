@@ -43,7 +43,6 @@
     --code-selection: oklch(0.7 0.15 250);
 }
 
-
 .dark {
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
@@ -78,8 +77,6 @@
     --sidebar-ring: oklch(0.556 0 0);
     --code-selection: oklch(0.6 0.2 280);
 }
-
-
 
 .dark {
     --background: oklch(0.145 0 0);
@@ -173,9 +170,29 @@
 .prose code::selection,
 .prose code *::selection {
     color: var(--code-selection);
-    background-color: color-mix(in oklch, var(--code-selection) 15%, transparent);
+    background-color: color-mix(
+        in oklch,
+        var(--code-selection) 15%,
+        transparent
+    );
 }
+@layer components {
+    .prose code:not(pre code) {
+        @apply px-2 py-0.5
+      rounded-md
+      text-xs font-medium
+      bg-primary/10
+      text-primary
+      border border-primary/20;
 
+        font-family: "Geist Variable", monospace;
+    }
+
+    .prose code::before,
+    .prose code::after {
+        content: none !important;
+    }
+}
 @layer base {
     * {
         @apply border-border outline-ring/50;
@@ -187,5 +204,3 @@
         @apply font-sans;
     }
 }
-
-
