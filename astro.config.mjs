@@ -8,7 +8,7 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://owais.dev",
+    site: "https://owais.is-a.dev",
     base: "/",
     integrations: [mdx(), sitemap(), react()],
     viewTransitions: false,
