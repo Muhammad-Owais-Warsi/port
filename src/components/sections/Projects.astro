@@ -40,6 +40,12 @@ const PROJECTS: Project[] = [
         launched_position: "#3",
     },
     {
+        name: "Dodo Payments Rust SDK",
+        description: "Rust SDK to interact with Dodo Payments API.",
+        url: "https://muhammad-owais-warsi.github.io/dodopayments_rust_sdk_docs/",
+        stack: ["Rust"],
+    },
+    {
         name: "zurl",
         description: "A faster, simpler curl alternative — built in Rust.",
         url: "https://github.com/Muhammad-Owais-Warsi/zurl",
@@ -48,15 +54,8 @@ const PROJECTS: Project[] = [
         launched_url: "https://peerlist.io/owais786/project/zurl",
         launched_position: "#5",
     },
-    {
-        name: "Dodo Payments Rust SDK",
-        description: "Rust SDK to interact with Dodo Payments api.",
-        url: "https://muhammad-owais-warsi.github.io/dodopayments_rust_sdk_docs/",
-        stack: ["Rust"],
-    },
 ];
 
-// Simple helper for the pinging ball colors
 const getStatusColor = (pos?: string) => {
     if (pos === "#1") return "bg-yellow-500";
     if (pos === "#2") return "bg-zinc-400";
@@ -65,9 +64,11 @@ const getStatusColor = (pos?: string) => {
 };
 ---
 
-<section id="projects" class="py-10 sm:py-12 px-4 sm:px-6">
+<section id="projects" class="py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
     <div class="mx-auto max-w-3xl">
-        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-6 sm:mb-8">
+        <h2
+            class="text-xl sm:text-2xl font-semibold tracking-tight text-foreground mb-4 sm:mb-6"
+        >
             Projects
         </h2>
 
@@ -79,19 +80,19 @@ const getStatusColor = (pos?: string) => {
                             <a
                                 href={project.url}
                                 target="_blank"
-                                class="group inline-flex items-center gap-2 text-base sm:text-lg font-semibold text-foreground hover:text-primary"
+                                class="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-foreground hover:text-primary"
                             >
                                 <span>{project.name}</span>
-                                <FiArrowUpRight class="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                                <FiArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                             </a>
                         </div>
 
-                        <p class="text-foreground/80 text-base leading-snug">
+                        <p class="text-foreground/70 text-sm sm:text-base leading-snug">
                             {project.description}
                         </p>
 
-                        <div class="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                            <span class="font-medium text-muted-foreground/70">
+                        <div class="flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
+                            <span class="font-semibold text-foreground/80">
                                 Tech Stack:
                             </span>
                             {project.stack.map((tech) => (

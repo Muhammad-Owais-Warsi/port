@@ -1,6 +1,7 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import Dock from "@/components/ui/dock";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 const isBlogRoute = Astro.url.pathname.startsWith("/blog");
 ---
@@ -9,16 +10,19 @@ const isBlogRoute = Astro.url.pathname.startsWith("/blog");
     <nav
         class="relative mx-auto flex w-full max-w-6xl items-center justify-center px-4 py-4"
     >
-        <div class="flex items-center gap-8 text-sm font-medium">
-            <HeaderLink href="/" class="hover:text-primary transition-colors">
-                Home
-            </HeaderLink>
-            <HeaderLink
-                href="/blog"
-                class="hover:text-primary transition-colors"
-            >
+        <div class="flex items-center gap-6 text-xs sm:text-sm font-medium">
+            <HeaderLink href="/" class="hover:text-primary"> Home </HeaderLink>
+            <HeaderLink href="/blog" class="hover:text-primary">
                 Blogs
             </HeaderLink>
+            <button
+                type="button"
+                class="theme-toggle inline-flex h-7 w-7 items-center justify-center text-muted-foreground hover:text-foreground"
+            >
+                <span class="sr-only" data-theme-label>Dark</span>
+                <FaSun className="h-4 w-4 dark:hidden" />
+                <FaMoon className="hidden h-4 w-4 dark:block" />
+            </button>
         </div>
     </nav>
 </header>

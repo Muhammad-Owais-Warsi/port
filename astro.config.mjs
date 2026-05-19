@@ -11,7 +11,6 @@ export default defineConfig({
     site: "https://owais.is-a.dev",
     base: "/",
     integrations: [mdx(), sitemap(), react()],
-    viewTransitions: false,
     build: {
         assets: "assets",
     },

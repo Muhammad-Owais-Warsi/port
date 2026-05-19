@@ -20,6 +20,54 @@ const imageUrl = new URL(imageSrc, Astro.site ?? Astro.url);
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<script>
+    const storageKey = "theme";
+    const root = document.documentElement;
+    const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+    ).matches;
+    const storedTheme = localStorage.getItem(storageKey);
+    const initialTheme = storedTheme ?? (prefersDark ? "dark" : "light");
+
+    const applyTheme = (theme: string) => {
+        if (theme === "dark") {
+            root.classList.add("dark");
+        } else {
+            root.classList.remove("dark");
+        }
+    };
+
+    const updateToggleLabels = (theme: string) => {
+        document.querySelectorAll(".theme-toggle").forEach((btn) => {
+            const label = btn.querySelector("[data-theme-label]");
+            if (label) {
+                label.textContent = theme === "dark" ? "Light" : "Dark";
+            }
+            btn.setAttribute(
+                "aria-label",
+                theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode",
+            );
+        });
+    };
+
+    applyTheme(initialTheme);
+
+    window.addEventListener("DOMContentLoaded", () => {
+        updateToggleLabels(initialTheme);
+        document.querySelectorAll(".theme-toggle").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const nextTheme = root.classList.contains("dark")
+                    ? "light"
+                    : "dark";
+                localStorage.setItem(storageKey, nextTheme);
+                applyTheme(nextTheme);
+                updateToggleLabels(nextTheme);
+            });
+        });
+    });
+</script>
 <link rel="icon" type="image/webp" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link

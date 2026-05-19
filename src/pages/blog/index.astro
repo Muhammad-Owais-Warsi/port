@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import PostList from "../../components/blog/PostList.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import { SITE_TITLE } from "../../consts";
 
 const posts = (await getCollection("blog")).sort(
     (a, b) =>
@@ -14,20 +13,43 @@ const pageTitle = `Blogs`;
 const pageDescription = "Blog site";
 ---
 
-<SiteLayout title={pageTitle} description={pageDescription} image="/og-blog.png">
+<SiteLayout
+    title={pageTitle}
+    description={pageDescription}
+    image="/og-blog.png"
+>
     <section class="mx-auto w-full max-w-3xl px-3 sm:px-4 py-6 sm:py-8">
         <div class="mb-6 sm:mb-8 flex items-center justify-between">
-            <h1 class="text-balance text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">
+            <h1
+                class="text-balance text-xl sm:text-2xl font-semibold tracking-tight"
+            >
                 {pageTitle}
             </h1>
-            <a
-                href="/rss.xml"
-                class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                title="RSS Feed"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-                RSS
-            </a>
+            <div class="flex items-center gap-3">
+                <a
+                    href="/rss.xml"
+                    class="inline-flex items-center gap-2 text-xs sm:text-sm text-muted-foreground hover:text-primary"
+                    title="RSS Feed"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M4 11a9 9 0 0 1 9 9"></path><path
+                            d="M4 4a16 16 0 0 1 16 16"></path><circle
+                            cx="5"
+                            cy="19"
+                            r="1"></circle></svg
+                    >
+                    RSS
+                </a>
+            </div>
         </div>
         <PostList posts={posts} />
     </section>

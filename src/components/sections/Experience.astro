@@ -26,9 +26,11 @@ const {
 } = Astro.props;
 ---
 
-<section id="experience" class="py-10 sm:py-16 px-4 sm:px-6">
+<section id="experience" class="py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
     <div class="mx-auto max-w-3xl">
-        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-6 sm:mb-10">
+        <h2
+            class="text-xl sm:text-2xl font-semibold tracking-tight text-foreground mb-4 sm:mb-6"
+        >
             {heading}
         </h2>
 
@@ -38,13 +40,13 @@ const {
                     <div class="relative group">
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1 sm:gap-2 mb-3 sm:mb-4">
                             <div class="space-y-1">
-                                <h3 class="text-lg sm:text-xl font-bold text-foreground">
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">
                                     {item.title}
                                 </h3>
-                                <div class="text-muted-foreground font-medium text-sm sm:text-base">
+                                <div class="text-foreground/70 font-semibold text-xs sm:text-sm">
                                     <span>{item.company}</span>
                                     {item.location && (
-                                        <span class="text-muted-foreground/60">
+                                        <span class="text-foreground/60">
                                             {" "}
                                             · {item.location}
                                         </span>
@@ -52,7 +54,7 @@ const {
                                 </div>
                             </div>
 
-                            <div class="text-sm sm:text-base font-semibold text-foreground  whitespace-nowrap">
+                            <div class="text-xs sm:text-sm font-semibold text-foreground/70 whitespace-nowrap">
                                 {item.start} — {item.end ?? "Present"}
                             </div>
                         </div>

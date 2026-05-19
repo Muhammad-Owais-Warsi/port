@@ -2,6 +2,7 @@
 import type { ImageMetadata } from "astro";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
+import DesktopSidebar from "../components/DesktopSidebar.astro";
 
 interface Props {
     title: string;
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const { title, description, image, ogType = "website" } = Astro.props;
+const isHome = Astro.url.pathname === "/";
+const mainClass = isHome ? "lg:pl-64" : "";
 ---
 
 <!doctype html>
@@ -24,8 +27,19 @@ const { title, description, image, ogType = "website" } = Astro.props;
         />
     </head>
     <body>
-        <Header />
-        <main>
+        {
+            isHome ? (
+                <>
+                    <div class="lg:hidden">
+                        <Header />
+                    </div>
+                    <DesktopSidebar />
+                </>
+            ) : (
+                <Header />
+            )
+        }
+        <main class={mainClass}>
             <slot />
         </main>
     </body>

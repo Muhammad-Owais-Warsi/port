@@ -6,39 +6,40 @@ interface Props {
 const { heading = "About Me" } = Astro.props;
 ---
 
-<section id="about" class="py-10 sm:py-16 px-4 sm:px-6">
+<section id="about" class="py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
     <div class="mx-auto max-w-3xl">
         <h2
-            class="text-2xl sm:text-4xl font-bold tracking-tight text-foreground mb-6 sm:mb-10 font-mono"
+            class="text-xl sm:text-2xl font-semibold tracking-tight text-foreground mb-4 sm:mb-6"
         >
             {heading}
         </h2>
 
         <div
-            class="space-y-6 sm:space-y-8 text-base sm:text-xl leading-relaxed text-foreground"
+            class="space-y-4 sm:space-y-5 text-sm sm:text-base leading-relaxed text-foreground/80 text-pretty"
         >
             <p>
-                I'm currently a 3rd year student pursuing my Bachelors degree.
-                <span class="font-bold"
-                    >From hating C.S. every second to spending hours on my
-                    laptop 😅.</span
-                >
+                I'm currently an undergrad pursuing my Bachelors degree. From
+                hating C.S. every second to spending hours debugging a bug.
             </p>
 
             <p>
-                Honestly, it's not a motivational line to start with, but
-                <span class="font-bold"
-                    >I love building projects, exploring new tech, and
-                    collaborating with others.</span
+                Building products across full stack applications, SDKs and
+                developer tools. I also sometimes write
+                <a
+                    href="/blog"
+                    class="underline underline-offset-4 decoration-border/80 text-primary"
                 >
+                    blogs
+                </a>
+                , exploring new technologies, and collaborating with others.
             </p>
 
             <p>
-                That's all, nothing too special. Maybe I'm building and shipping
+                That's all, nothing too special. Probably building or writing
                 while you're reading this.
             </p>
 
-            <p>Thanks a lot for reading! 😊</p>
+            <p>Thanks for reading :)</p>
         </div>
     </div>
 </section>

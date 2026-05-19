@@ -1,0 +1,90 @@
+---
+import { SiPeerlist } from "react-icons/si";
+import { FaHashnode, FaEnvelope } from "react-icons/fa6";
+import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
+
+const navItems = [
+    { label: "Home", href: "#hero" },
+    { label: "About", href: "#about" },
+    { label: "Work", href: "#experience" },
+    { label: "Projects", href: "#projects" },
+    { label: "Open Source", href: "#open-source" },
+];
+
+const socials = [
+    {
+        label: "GitHub",
+        href: "https://github.com/Muhammad-Owais-Warsi",
+        icon: FaGithub,
+    },
+    {
+        label: "LinkedIn",
+        href: "https://linkedin.com/in/muhammad-owais-warsi",
+        icon: FaLinkedin,
+    },
+    {
+        label: "Twitter",
+        href: "https://twitter.com/MO_warsi786",
+        icon: FaTwitter,
+    },
+    {
+        label: "Peerlist",
+        href: "https://peerlist.io/owais786",
+        icon: SiPeerlist,
+    },
+];
+---
+
+<aside
+    class="hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar pl-10 pr-6 py-8 text-sidebar-foreground"
+>
+    <div class="space-y-1"></div>
+
+    <nav class="mt-10 space-y-4 text-xs sm:text-sm font-medium">
+        {
+            navItems.map((item) => (
+                <a
+                    href={item.href}
+                    class="block text-muted-foreground  hover:text-primary"
+                >
+                    {item.label}
+                </a>
+            ))
+        }
+        <a
+            href="/blog"
+            class="block text-xs sm:text-sm font-medium text-muted-foreground hover:text-primary"
+        >
+            Blogs
+        </a>
+    </nav>
+
+    <div class="mt-8 pt-6"></div>
+
+    <div class="mt-auto border-t border-sidebar-border pt-6 text-xs sm:text-sm">
+        <div class="flex items-center gap-5">
+            {
+                socials.map((social) => {
+                    const Icon = social.icon;
+                    return (
+                        <a
+                            href={social.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={social.label}
+                            class="text-muted-foreground hover:text-primary"
+                        >
+                            <Icon className="h-4 w-4" />
+                        </a>
+                    );
+                })
+            }
+        </div>
+        <button
+            type="button"
+            class="theme-toggle mt-5 text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+            <span data-theme-label>Dark</span>
+        </button>
+    </div>
+</aside>

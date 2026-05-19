@@ -28,14 +28,14 @@ const { post, isFeatured = false } = Astro.props;
         }
         <h4
             class:list={[
-                "text-base sm:text-lg font-semibold text-foreground",
+                "text-sm sm:text-base font-semibold text-foreground",
                 "group-hover:text-primary",
-                { "sm:text-3xl text-2xl": isFeatured },
+                { "sm:text-2xl text-xl": isFeatured },
             ]}
         >
             {post.data.title}
         </h4>
-        <p class="text-sm text-muted-foreground">
+        <p class="text-xs sm:text-sm text-muted-foreground">
             {post.data.updatedDate ? "Updated " : ""}
             <FormattedDate date={post.data.updatedDate ?? post.data.pubDate} />
         </p>

@@ -57,9 +57,11 @@ const CONTRIBUTIONS: Contribution[] = [
 ];
 ---
 
-<section id="open-source" class="py-10 sm:py-12 px-4 sm:px-6">
+<section id="open-source" class="py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
     <div class="mx-auto max-w-3xl">
-        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-6 sm:mb-8">
+        <h2
+            class="text-xl sm:text-2xl font-semibold tracking-tight text-foreground mb-4 sm:mb-6"
+        >
             Open Source Contributions
         </h2>
 
@@ -71,12 +73,12 @@ const CONTRIBUTIONS: Contribution[] = [
                             href={contribution.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="group flex items-center gap-2 text-base sm:text-lg font-semibold text-foreground hover:text-primary hover:underline"
+                            class="group flex items-center gap-2 text-sm sm:text-base font-semibold text-foreground hover:text-primary hover:underline"
                         >
                             <span>{contribution.name}</span>
-                            <FiArrowUpRight class="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                            <FiArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                         </a>
-                        <p class="mt-2 text-sm text-muted-foreground leading-relaxed">
+                        <p class="mt-2 text-xs sm:text-sm text-foreground/70 leading-relaxed">
                             {contribution.description}
                         </p>
                     </article>
