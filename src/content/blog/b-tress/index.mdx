@@ -1,0 +1,328 @@
+---
+title: "Why do databases even use B-Trees"
+description: "Blog on B-Trees."
+pubDate: "Jun 13 2026"
+heroImage: "./header.jpg"
+---
+
+You can't imagine a modern system running on the internet without a database. The efficiency and speed of databases play a vital role in real-world applications. It wouldn't make much sense if users had to wait 2 minutes every time they wanted to retrieve some data from your app.
+
+Modern databases can store billions of records and still find the data you're looking for in just a few milliseconds.
+
+The magic lies in the data structures they use internally. Most **databases rely on B-Trees or B+ Trees** to organize and access data efficiently at massive scales. But the question arises why not simply use arrays, linked list or binary search trees (might be really close to b-trees) ?
+
+Let's try to understand the cons and what gave rise to B-trees.
+
+## Why not arrays
+
+The first thought that may come to mind, is why not use arrays to store the data, and tbh why not, it is easy to implement, iterate and search.
+
+Imagine you have 1,000,000,000 rows, and you stored them into an array
+User came and writes the following query
+
+```sql
+SELECT * FROM products WHERE id = 983746;
+```
+
+The simplest approach is linear search, in which we go to each element one by one and compare with the `id` we have to search until we find it.
+
+In worst case it can cost you `1,000,000,000 comparisons`. You might think that modern compute can easily handle this heavy calculation, but we can't ignore the fact that in each iteration it's not just comparing but also reading from the disk and performing disk I/O.
+
+Assume 1 comparison takes only 1 nanosecond.
+
+```
+1,000,000,000 × 1 nanosecond = 1 second
+```
+
+This is just for one query, in real scenarios, you have tens and thousands of large and complicated queries to handle.
+
+Now the next immediate optimisation you may think of is **why not sort the array or store the data in sorted manner and perform binary search? this way we can perform the search really fast and save our computation.**
+
+You have the following data stored in an array.
+
+```
+// Instead of storing
+[1, 10, 7, 3, 4]
+
+
+// Store like this
+[1, 3, 4, 7, 10]
+```
+
+If we have 1 billion sorted records here, we can perform the binary search.
+The time complexity of binary search is `O(log n)`
+
+```
+log₂(1,000,000,000) ≈ 30 comparisons
+```
+
+But there is a new problem.
+
+Databases are not only reading data. They are constantly inserting new records.
+Imagine a new data arrives with id 5, we have to insert it an array
+
+To keep the array sorted, we cannot simply place 5 anywhere.
+
+We need to create space and move every element after it one position forward
+
+```
+[1, 3, 4, 7, 10]
+
+To add a new value
+
+// 1. Create space
+[1, 3, 4, _, 7, 10]
+
+// 2. Insert 5
+[1, 3, 4, 5, 7, 10]
+```
+
+For a small array, this is not a big problem. But with billions of records, **inserting one value may require moving millions of existing values.**
+
+## How about linked lists
+
+A linked list solves the insertion problem of arrays because elements don't need to be stored next to each other.
+
+```
+// Instead of moving data:
+
+[1, 3, 4, _, 7, 10]
+
+// we can simply change pointers:
+
+1 → 3 → 4 → 5 → 7 → 10
+```
+
+Insertion becomes much easier. But we created another problem. A linked list has no direct way to jump to an element. To find a value, we still have to start from the beginning and follow every pointer one by one.
+
+So searching again becomes `O(n)`
+
+## Binary Search Tree
+
+At this point, you need a data structure that can solve the problems we faced earlier.
+
+Sorted arrays gave you fast searching, but inserting new data required shifting elements. Linked lists made insertion easier, but searching became slow.
+
+[Binary Search tree](https://en.wikipedia.org/wiki/Binary_search_tree), is a tree-based data structure where each node can have at most two children:
+
+- The left child contains values smaller than the parent.
+- The right child contains values greater than the parent.
+
+```
+    2
+  /  \
+ 1    3
+```
+
+So here, if you need to look out for an element, let's say 3
+
+```
+Start at 2
+3 > 2 → move right
+Found 3
+```
+
+To insert an element, let's say 4
+
+```
+// before
+
+    2
+  /  \
+ 1    3
+
+
+// after
+
+    2
+  /  \
+ 1    3
+       \
+        4
+```
+
+you don't need to move existing data like we did with arrays, simply create a new node at the correct position.
+
+Until here it looks perfect.
+
+- Fast searching like sorted arrays
+- Easy insertions like linked lists.
+
+But the problem lies in balancing this tree.
+Imagine you have the following data:
+
+```
+// data
+[1, 2, 3, 4, 5]
+
+// The BST would look like
+
+1
+  \
+   2
+    \
+     3
+      \
+       4
+        \
+         5
+```
+
+If we notice the tree properly, we can see that it is no longer a tree-like structure, instead become a linked list. Searching again become inefficient.
+
+We need a tree that can automatically stay balanced even when data is inserted in any order.
+
+This leads us to **balanced trees**.
+
+## B-Trees
+
+[B-Tree](https://en.wikipedia.org/wiki/B-tree) is a **self-balancing** tree data structure that maintains **sorted data and allows searches, sequential access, insertions, and deletions in logarithmic time.**
+
+A node in a B-tree can have **more than 2 children,** this is helps in reducing the height of the tree and you can maintain optimal searches on large data.
+
+> What's the meaning of "B" in a B-tree? Read it [here](https://en.wikipedia.org/wiki/B-tree#History)
+
+A B-tree of order `m` is a tree that satisfies the following properties:
+
+1. Every node has at most m children.
+2. Every node, except for the root and the leaves, has at least [m/2] children.
+3. The root node has at least two children unless it is a leaf.
+4. All leaves appear on the same level.
+5. A non-leaf node with k children contains k−1 keys.
+
+Below is the representation of a B-tree of order 3.
+
+```
+Data: [10, 20, 30, 40]
+
+
+B-tree
+
+        [20]
+       /    \
+    [10]    [30 | 40]
+```
+
+You can try building a B-tree with really good visualisation [here](https://www.cs.usfca.edu/~galles/visualization/BTree.html).
+
+Before you see how and why b-tree is better than others, we go through the basics really quick.
+
+- Memory is a giant array of bytes
+
+```
+1 byte = 8 bits
+
+// An integer cost 32 bits
+32 / 8 = 4 bytes
+
+// A pointer cost 64 bits
+64 / 8 = 8 bytes
+```
+
+- A database page is the fundamental unit of data storage and transfer in relational databases, typically 8 KB to 16 KB in size.
+
+```
+1 KB = 1024 bytes
+
+// This is the size of one page
+16 KB = 16 * 1024 = 16384 bytes
+
+1 node = 1 page
+```
+
+Here even if you need to read a 10 bytes, the operating system reads the whole chunk of 16384 bytes.
+Now lets see how many integers can fit in this space
+
+```
+1 integer = 4 bytes
+
+16384 / 4 = 4096 integers
+```
+
+If in one page you can store 4096 integers and the operating system anyway reads the complete page no matter we need it or not, why not just utilise the space instead of storing a single value unlike in binary search trees.
+
+Let's see some maths:
+
+- you have 1000 keys
+- each key is of 4 bytes
+- child pointers will be 1001, as `no. of pointers = no. of keys + 1`
+- size of pointer is 8 bytes
+
+```
+1000 * 4 = 4000 bytes
+
+1001 * 8 = 8008 bytes
+
+// total
+4000 + 8008 = 12008 bytes
+
+```
+
+This can easily fit into 16,384 bytes of space, i.e., the space of one page or one node.
+
+So this is one of the way B-tree is better than any previous other data structures we discussed.
+
+Secondly, a node can have multiple children. If you have `k` keys than a node in a b-tree can have at max `k+1` children. Unlike in binary search trees where you can have at max 2 children.
+This become really important once the amount of data grows.
+
+If you have b-tree, where each node can have 1000 children
+
+```
+The first level points to 1000 nodes
+
+// The second level
+1000 * 1000 = = 1000000 nodes
+
+// The third level
+1000 × 1000 × 1000 = 1000000000 nodes
+```
+
+Imagine a tree with only 3 level gives you an access to a billion nodes, containing multiple values in each.
+You can imagine how memory efficient this data structure is.
+
+### Searching for a value
+
+Until now you've seen that how b-tree stores a huge amount of data on the disk so efficiently. Now let's try to search a record and fetch it from the disk.
+
+Imagine you've a following B-tree of order 3
+
+- max number of keys per node are 2
+- you've to search key 50
+
+```
+       [20 | 40]
+    /      |       \
+[10]     [30]     [50 | 60]
+```
+
+Start from root, compare with the keys `50 > 40`, so you know you cannot move to the left or the middle tree.
+Move to the right child, here you found `50 = 50`.
+
+To understand, how fast b-trees are, here is a simple math
+
+- Imagine you've a billion keys
+
+Now compare a binary search tree and a b-tree.
+
+```
+// BST has at max 2 child nodes
+// therefore to store billion keys
+
+log₂(1,000,000,000) = 30 levels
+```
+
+now to search for a target you may have to traverse through all the 30 levels. In a database, each node access can mean reading data from storage.
+
+So a single lookup may require multiple storage accesses.
+
+Similarly on the other hand, in b-tree we can store a billion keys in just 3 levels where each node contains multiple keys. Only a few page accesses.
+
+**The main advantage of b-trees is not that they reduce the number of comparisons.**
+
+The real advantage is that they reduce the **number of storage reads required to locate data.**
+
+You can read about the other operations on b-tree from [here](https://en.wikipedia.org/wiki/B-tree#Algorithms).
+
+## Conclusion
+
+B-Tree is a **self-balancing** tree data structure that maintains **sorted data and allows searches, sequential access, insertions, and deletions in logarithmic time.** Unlike a BST, a b-tree can contain multiple keys in each node and can have more than 2 child nodes. The main advantage of using a b-tree over a BST is the reduction in the number of disk I/O operations and the efficient storage of huge amounts of data.
