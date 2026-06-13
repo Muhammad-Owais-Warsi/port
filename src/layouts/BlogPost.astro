@@ -4,7 +4,8 @@ import type { CollectionEntry } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
 import SiteLayout from "./SiteLayout.astro";
 
-const katexStylesheet = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
+const katexStylesheet =
+    "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
 
 type Props = CollectionEntry<"blog">["data"];
 
@@ -87,7 +88,7 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
                 <hr class="mt-6 border-border" />
             </div>
             <div
-                class="prose prose-neutral dark:prose-invert max-w-none [&_a]:text-primary [&_a]:underline-offset-4 dark:[&_img]:bg-white dark:[&_img]:p-2 dark:[&_img]:rounded-lg dark:[&_img]:shadow-sm"
+                class="prose prose-neutral dark:prose-invert max-w-none [&_a]:text-primary [&_a]:underline-offset-4 [&_img]:rounded-lg [&_img]:border [&_img]:border-border [&_img]:bg-card [&_img]:p-2 [&_img]:shadow-sm"
             >
                 <slot />
             </div>
