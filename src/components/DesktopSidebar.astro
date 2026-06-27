@@ -80,11 +80,21 @@ const socials = [
                 })
             }
         </div>
-        <button
-            type="button"
-            class="theme-toggle mt-5 text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-            <span data-theme-label>Dark</span>
-        </button>
+        <div class="mt-5 flex items-center gap-4">
+            <button
+                type="button"
+                class="theme-toggle text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+                <span data-theme-label>Dark</span>
+            </button>
+            <a
+                href="/llms.txt"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs sm:text-sm font-medium text-muted-foreground hover:text-primary"
+            >
+                llms.txt
+            </a>
+        </div>
     </div>
 </aside>
