@@ -36,9 +36,9 @@ const {
         if (!text) return;
 
         await navigator.clipboard.writeText(text);
-        commandText.classList.add("text-primary", "font-semibold");
+        commandText.classList.add("select-bg");
         setTimeout(() => {
-            commandText.classList.remove("text-primary", "font-semibold");
+            commandText.classList.remove("select-bg");
         }, 1200);
     };
 

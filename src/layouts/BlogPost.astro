@@ -1,15 +1,19 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import SiteLayout from "./SiteLayout.astro";
+import HeadingSidebar from "../components/blog/HeadingSidebar.astro";
 
 const katexStylesheet =
     "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">["data"] & {
+    headings: MarkdownHeading[];
+};
 
-const { title, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, pubDate, updatedDate, heroImage, headings, toc } = Astro.props;
 const ogImage = heroImage ? heroImage : "/og-blog.png";
 ---
 
@@ -20,6 +24,7 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
     ogType="article"
 >
     <link rel="stylesheet" href={katexStylesheet} crossorigin="anonymous" />
+    <HeadingSidebar headings={headings} toc={toc} />
     <article class="px-3 sm:px-4 pb-10 sm:pb-16 pt-4 sm:pt-6">
         <div class="mx-auto w-full max-w-4xl">
             {

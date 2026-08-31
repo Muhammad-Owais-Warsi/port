@@ -14,6 +14,19 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
+			// Curated headings for the hover sidebar. Each entry matches the heading
+			// text in the post by default; an optional `title` overrides the display label.
+			toc: z
+				.array(
+					z.union([
+						z.string(),
+						z.object({
+							text: z.string(),
+							title: z.string().optional(),
+						}),
+					])
+				)
+				.optional(),
 		}),
 });
 

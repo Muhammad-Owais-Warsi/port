@@ -3,6 +3,22 @@ title: "How Apache Cassandra reads and writes data"
 description: "Blog on apache cassandra working."
 pubDate: "April 5 2026"
 heroImage: "./header.png"
+toc:
+  - "Some really interesting features of Apache Cassandra"
+  - "Client Connection and Coordinator Selection"
+  - "Data Distribution and Replication Strategy"
+  - "Replication Strategy"
+  - "How is data written?"
+  - "commit log"
+  - "memtable"
+  - "Flushing the data from the memtable"
+  - "SSTables"
+  - "How is data maintained?"
+  - "Compaction"
+  - "How is data updated?"
+  - "How is data deleted?"
+  - "How is data read?"
+  - "Conclusion"
 ---
 
 [Apache Cassandra](https://cassandra.apache.org/_/index.html) is a massively scalable, **NoSQL database** capable of handling petabytes of information and thousands of concurrent users/operations per second. Perfect for managing humongous amounts of structured, semi-structured and unstructured data across multiple data centers and the cloud. Cassandra delivers **continuous availability (different from high availability), linear scalabilty and operational simplicity across servers with no single point of failure**.

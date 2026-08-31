@@ -196,11 +196,16 @@
     background-color: oklch(0.88 0.04 255 / 0.45);
     text-shadow: 0 0.5px 0 oklch(1 0 0 / 0.3);
 }
-
 ::-moz-selection {
     color: inherit;
     background-color: oklch(0.88 0.04 255 / 0.45);
     text-shadow: 0 0.5px 0 oklch(1 0 0 / 0.3);
+}
+
+.select-bg {
+    display: inline-block;
+    background-color: oklch(0.88 0.04 255 / 0.45);
+    border-radius: 0.125rem;
 }
 
 @layer components {
@@ -243,6 +248,12 @@
 }
 
 @layer base {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
     * {
         @apply border-border outline-ring/50;
     }

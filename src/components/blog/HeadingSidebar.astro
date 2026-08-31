@@ -1,0 +1,226 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface TocEntry {
+    slug: string;
+    text: string;
+    title: string;
+    depth: number;
+}
+
+interface Props {
+    headings: MarkdownHeading[];
+    toc?: Array<string | { text: string; title?: string }>;
+}
+
+const { headings, toc = [] } = Astro.props;
+
+// Normalize punctuation differences (e.g. straight vs. typographic apostrophes)
+// that remark can introduce when rendering heading text, so curated TOC entries
+// still match even if the source uses a different character.
+const normalize = (s: string) =>
+    s
+        .trim()
+        .toLowerCase()
+        .replace(/[\u2019\u2018]/g, "'");
+
+// Bind each curated TOC entry (in order) to the next matching heading. This lets
+// repeated headings (e.g. several "Final State" sections) each get its own title.
+const used = new Set<number>();
+const entries: TocEntry[] = [];
+toc.forEach((entry) => {
+    const text = typeof entry === "string" ? entry : entry.text;
+    const title = typeof entry === "string" ? text : entry.title ?? text;
+    const key = normalize(text);
+    const idx = headings.findIndex(
+        (h, i) => !used.has(i) && normalize(h.text) === key
+    );
+    if (idx === -1) return;
+    used.add(idx);
+    const h = headings[idx];
+    entries.push({
+        slug: h.slug,
+        text: h.text,
+        title,
+        depth: h.depth,
+    });
+});
+---
+
+{
+    entries.length > 0 && (
+        <div data-toc-root class="fixed inset-0 pointer-events-none z-40">
+            {/* Desktop: side handle + panel */}
+            <div class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 flex-col items-end pointer-events-auto">
+                <button
+                    type="button"
+                    data-toc-toggle
+                    aria-label="Toggle table of contents"
+                    aria-expanded="false"
+                    class="flex h-24 w-3 flex-col items-center justify-center gap-2 rounded-l-md border border-border border-r-0 bg-card py-3 cursor-pointer"
+                >
+                    <span class="h-5 w-0.5 rounded-full bg-muted-foreground/60"></span>
+                    <span class="h-5 w-0.5 rounded-full bg-muted-foreground/60"></span>
+                    <span class="h-5 w-0.5 rounded-full bg-muted-foreground/60"></span>
+                </button>
+                <div
+                    data-toc-panel
+                    data-toc-desktop
+                    class="absolute right-0 top-1/2 hidden w-64 -translate-y-1/2 rounded-l-xl border border-border bg-card p-4 shadow-lg"
+                >
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        On this page
+                    </p>
+                    <ul class="toc-scroll max-h-72 space-y-2 overflow-y-auto pr-1">
+                        {
+                            entries.map((entry) => (
+                                <li>
+                                    <a
+                                        href={`#${entry.slug}`}
+                                        data-sidebar-heading
+                                        class="block break-words text-sm font-medium text-muted-foreground hover:text-primary"
+                                    >
+                                        {entry.title}
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            {/* Mobile: floating handle + bottom sheet */}
+            <div class="lg:hidden pointer-events-auto">
+                <button
+                    type="button"
+                    data-toc-mobile-open
+                    aria-label="Open table of contents"
+                    class="fixed bottom-5 left-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs font-medium text-foreground shadow-md cursor-pointer"
+                >
+                    <span class="flex flex-col gap-0.5">
+                        <span class="h-0.5 w-3 rounded-full bg-muted-foreground"></span>
+                        <span class="h-0.5 w-3 rounded-full bg-muted-foreground"></span>
+                    </span>
+                    Contents
+                </button>
+                <div
+                    data-toc-sheet-backdrop
+                    class="fixed inset-0 hidden bg-black/40"
+                ></div>
+                <div
+                    data-toc-sheet
+                    class="fixed inset-x-0 bottom-0 hidden max-h-[70vh] rounded-t-2xl border-t border-border bg-card p-5 pb-8 shadow-lg"
+                >
+                    <div class="mx-auto mb-4 h-1 w-10 rounded-full bg-border"></div>
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        On this page
+                    </p>
+                    <ul class="toc-scroll max-h-[50vh] space-y-3 overflow-y-auto pr-1">
+                        {
+                            entries.map((entry) => (
+                                <li>
+                                    <a
+                                        href={`#${entry.slug}`}
+                                        data-sidebar-heading
+                                        class="block break-words text-[0.9375rem] font-medium text-foreground"
+                                    >
+                                        {entry.title}
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+<script>
+    const panel = document.querySelector("[data-toc-panel]");
+    const toggle = document.querySelector("[data-toc-toggle]");
+
+    const mobileOpen = document.querySelector("[data-toc-mobile-open]");
+    const backdrop = document.querySelector("[data-toc-sheet-backdrop]");
+    const sheet = document.querySelector("[data-toc-sheet]");
+
+    const baseOffset = 80;
+
+    const scrollToHeading = (slug) => {
+        const el = document.getElementById(slug);
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY - baseOffset;
+        window.scrollTo({ top, behavior: "smooth" });
+    };
+
+    const closeAll = () => {
+        toggle?.setAttribute("aria-expanded", "false");
+        panel?.classList.add("hidden");
+        closeSheet();
+    };
+
+    const closeSheet = () => {
+        sheet?.classList.add("hidden");
+        backdrop?.classList.add("hidden");
+    };
+
+    toggle?.addEventListener("click", () => {
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        panel?.classList.toggle("hidden");
+    });
+
+    mobileOpen?.addEventListener("click", () => {
+        backdrop?.classList.remove("hidden");
+        sheet?.classList.remove("hidden");
+    });
+
+    backdrop?.addEventListener("click", closeSheet);
+
+    document.querySelectorAll("[data-sidebar-heading]").forEach((link) => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const id = link.getAttribute("href")?.slice(1);
+            if (id) scrollToHeading(id);
+            closeAll();
+        });
+    });
+
+    document.addEventListener("click", (e) => {
+        const controller = e.target.closest?.("[data-toc-root]");
+        const sheetOpen = sheet && !sheet.classList.contains("hidden");
+        const desktopOpen =
+            toggle?.getAttribute("aria-expanded") === "true";
+        if (
+            (desktopOpen || sheetOpen) &&
+            !controller
+        ) {
+            closeAll();
+        }
+    });
+</script>
+
+<style>
+    .toc-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: var(--muted-foreground) transparent;
+    }
+
+    .toc-scroll::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .toc-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .toc-scroll::-webkit-scrollbar-thumb {
+        background-color: var(--muted-foreground);
+        border-radius: 9999px;
+        opacity: 0.5;
+    }
+
+    .toc-scroll::-webkit-scrollbar-thumb:hover {
+        background-color: var(--border);
+    }
+</style>

@@ -7,12 +7,13 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeSlug from "rehype-slug";
 
 // https://astro.build/config
 export default defineConfig({
     site: "https://owais.is-a.dev",
     base: "/",
-    integrations: [mdx({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] }), sitemap(), react()],
+    integrations: [mdx({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeSlug, rehypeKatex] }), sitemap(), react()],
     build: {
         assets: "assets",
     },
