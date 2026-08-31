@@ -32,23 +32,23 @@ docker pull ubuntu:latest
 Now you start a container that runs an ubuntu machine that is built with the help of the image you just pulled.
 
 ```
-docker run ubunut:latest
+docker run ubuntu:latest
 ```
-But there's an issue, **docker will run the container as long as there is an active process running in it. Ubuntu machine has none. Hence it imediately stopped after getting started.**
+But there's an issue, **docker will run the container as long as there is an active process running in it. Ubuntu machine has none. Hence it immediately stopped after getting started.**
 
-**To make it run 24/7 we need to run it in detached mode (run in the background with full control)**. For this you just `-d` flag in the command 
+**To make it run 24/7 we need to run it in detached mode (run in the background with full control)**. For this you just need the `-d` flag in the command 
 
 ```
 docker run -d ubuntu:latest
 ```
 Here we can give many other flags as per our use, like `--name <some_name>` to give name to your container 
-`-p <machine_port:container_port>` to open/set-up a port for yur container.
+`-p <machine_port:container_port>` to open/set-up a port for your container.
 
 
 ## SSH (Secure Shell)
-**It is a protocol used to access remote computers.** Here you will be performing SSH into your container to get the access of and perform various activities.
+**It is a protocol used to access remote computers.** Here you will be performing SSH into your container to get access to and perform various activities.
 
-By default SSH runs on port `22`, hence when creating a container we open up a port that attach to this specific port for SSH access.
+By default SSH runs on port `22`, hence when creating a container we open up a port that attaches to this specific port for SSH access.
 
 
 This command will forward any request coming to your machine's port `2222` to  container's port `22`
@@ -68,7 +68,7 @@ docker run -d -p 2222:22 -p 4321:4321 ubuntu:latest bash -c "apt update && apt i
 & service ssh start && tail -f /dev/null"
 ```
 
-This command does following
+This command does the following
 
 - Update packages
 - Install SSH server
@@ -80,7 +80,7 @@ This command does following
 You will notice that I've also added another port `-p 4321:4321` in the command, it does nothing but **opens another port that connects my machine 4321 port to container's 4321 port** (just in case if we need to do anything in future). So you can open multiple ports also according to your use case.
 
 
-Now once everything is setup, we can now try entering our container with the following command 
+Now once everything is set up, we can now try entering our container with the following command 
 
 ```
 ssh root@localhost -p 2222
@@ -109,7 +109,7 @@ Try entering your container again...
 
 ## Inside Container
 Now we're inside a container, you can try running different linux commands such as `ls`, `cd` etc.
-But here we don't get Git (we get it by default in linux machines btw), but here we don't, hence we need to install it. 
+But here we don't get Git (we get it by default in linux machines btw), hence we need to install it. 
 
 I'm also installing `curl` and `unzip` also along with `git` as it is required to run my project. You can install any other if you want. 
 
@@ -142,9 +142,9 @@ Therefore if you visit [http://localhost:4321](http://localhost:4321), you'll be
 ## Problems
 It seems everything is done and sorted? But you can't share this url to someone and ask them to visit our site.
 
-**tbh in this demo, we can't make people access our site but atleast fix our URL somehow**
+**tbh in this demo, we can't make people access our site but at least fix our URL somehow**
 
-If you have notice, websites have URLs like `https://google.com`, `https://zed.dev/` etc.
+If you have noticed, websites have URLs like `https://google.com`, `https://zed.dev/` etc.
 
 On comparing the URL you can see 3 major issues
 
@@ -159,7 +159,7 @@ In the next sections you will be solving the first 2 issues, for the 3rd one we 
 How can we remove port from our application? If you try to look closely to these `https` URLs you'll notice that internally they are also hitting some port that isn't visible to you. 
 
 
-You can check this by going to the network tab of your page by inspecting it. The below photo shows the the port `https://google.com` hits when you visit it. 
+You can check this by going to the network tab of your page by inspecting it. The below photo shows the port `https://google.com` hits when you visit it. 
 
 It is `443`. You can try this on any other website and notice it will be 443 only. 
 ![Diagram](./first.png)
@@ -170,7 +170,7 @@ This confirms that default port of any
 - **HTTP website it is `80`**
 
 
-Our site is currently running on `HTTP` and on port `4321`, and we know that `HTTP` or we can say `localhost` runs by default on port `80`. So even you if you type `localhost` on the browser without the port it will open up a page and is a valid address. 
+Our site is currently running on `HTTP` and on port `4321`, and we know that `HTTP` or we can say `localhost` runs by default on port `80`. So even if you type `localhost` on the browser without the port it will open up a page and is a valid address. 
 
 ### Current application state
 ![Diagram](./second.png)
@@ -198,7 +198,7 @@ Our site URL will automatically transition from
 > docker run -d -p 2222:22 -p 80:80 <image_name>
 >
 
-When running the command above instead of port 4321 we can give bind the container to port 80. Carefully see the `-p` flag.
+When running the command above instead of port 4321 we can bind the container to port 80. Carefully see the `-p` flag.
 
 ```
 docker run -d -p 2222:22 -p 80:80 ubuntu:latest bash -c "apt update && apt install -y openssh-server && echo 'root:123' | chpasswd &
@@ -214,13 +214,13 @@ docker run -d -p 2222:22 -p 80:80 ubuntu:latest bash -c "apt update && apt insta
 
 Now on chrome if you try visiting `http://localhost`, you can access the site. 
 
-**But here come another issue.** What happens if there are multiple servers inside our container. We can't bind each one of them to port `80` as it can be used by one at a time, and obviously you'll not buy or in this case run another machine just to run another server and bind it port 80.
+**But here comes another issue.** What happens if there are multiple servers inside our container. We can't bind each one of them to port `80` as it can be used by one at a time, and obviously you'll not buy or in this case run another machine just to run another server and bind it port 80.
 
 ![Diagram](./fourth.png)
 
 ## Introducing reverse proxy
 
-What if we let our applications/servers running on the port they are and there's another service/system that sits just before our running applications. It's only work is to **intercept the incoming requests, check the domain from which they're from and redirect to the respective ports.** This is called reverse proxy.
+What if we let our applications/servers running on the port they are and there's another service/system that sits just before our running applications. Its only work is to **intercept the incoming requests, check the domain from which they're from and redirect to the respective ports.** This is called reverse proxy.
 
 There are several reverse proxies available in the market such as [nginx](https://nginx.org/), [caddy](https://caddyserver.com/) etc.. 
 
@@ -250,7 +250,7 @@ You can paste the following configuration if running my project or else change i
 
 Very quickly I'll tell what it does. 
 
-It listens for the incoming requests on port `80`, and check the domain it is coming from. If it is `localhost`, iot redirects the request to port `4321` on which our application is running.
+It listens for the incoming requests on port `80`, and check the domain it is coming from. If it is `localhost`, it redirects the request to port `4321` on which our application is running.
 
 ```
 events {
@@ -281,7 +281,7 @@ http {
 }
 ```
 
-Save this config and reload the ngnix server.
+Save this config and reload the nginx server.
 
 ```
 service nginx --reload
@@ -294,7 +294,7 @@ Visit `http://localhost` again and you'll be able to access the application. But
 
 
 ## Issue 2
-The browser identify our site as not secure. You may check the status yourself from the browsrer itself as shown below in the photo.
+The browser identify our site as not secure. You may check the status yourself from the browser itself as shown below in the photo.
 
 ![Diagram](./sixth.png)
 
@@ -305,7 +305,7 @@ The browser identify our site as not secure. You may check the status yourself f
 
 >HTTPS (Hypertext Transfer Protocol Secure) is a more secure version of HTTP.
 
-If you remember we've already discussed about the default port of `HTTP` and `HTTPS`. Currrently the requests coming on port `80` is captured by nginx and redirected to our application running on port `4321`. 
+If you remember we've already discussed about the default port of `HTTP` and `HTTPS`. Currently the requests coming on port `80` is captured by nginx and redirected to our application running on port `4321`. 
 
 
 What if instead of port `80` we make our nginx listen to port `443` which is a default port for `HTTPS`. But this is not simple as switching the ports.
@@ -326,12 +326,12 @@ SSL (Secure Socket Layer) or TLS (Transport Layer Security) certificate is a sma
 Read in detail [here](https://aws.amazon.com/compare/the-difference-between-ssl-and-tls/).
 
 
-> We use TLS in today's time and not SSL, but the industry call them as SSL certificates out of habit.
+> We use TLS in today's time and not SSL, but the industry calls them as SSL certificates out of habit.
 
 
-So the next step to solve the issue is to generate the certifcate for our site and give to nginx, so it can handle all the verification and other process as all the request is handled by nginx before it reaches our actual server.
+So the next step to solve the issue is to generate the certificate for our site and give to nginx, so it can handle all the verification and other process as all the request is handled by nginx before it reaches our actual server.
 
-There are many services paid and unpaid using whch you can generate the certificates. I'm gonna use one of them known as `mkcert`.
+There are many services paid and unpaid using which you can generate the certificates. I'm gonna use one of them known as `mkcert`.
 
 Install the required packages
 ```
@@ -340,7 +340,7 @@ apt-get update && apt-get install -y mkcert openssl
 
 After installing, we will create a `certs` folder inside our `nginx` folder and create a certificate for our `localhost` domain using `mkcert`.
 
-It will automatically update our `ngninx.conf` file referencing these certificates.
+It will automatically update our `nginx.conf` file referencing these certificates.
 
 ```
 mkdir -p /etc/nginx/certs
@@ -368,9 +368,7 @@ Now try visiting `https://localhost` and notice the URL carefully. This time you
 
 You still might see unsecure notification, this is because the browser is running inside our actual machine but the certificates reside inside the container.
 
-
 **Hence, we have also solved our second problem.**
 
-
 ## Conclusion
-Starting from running an ubuntu machine on our system to run our  application on HTTPS, we've covered seevral topics including reverse proxy and SSH. For issue 3 we need to buy a domain, for now we can think `localhost` as our domain.
+Starting from running an ubuntu machine on our system to run our  application on HTTPS, we've covered several topics including reverse proxy and SSH. For issue 3 we need to buy a domain, for now we can think `localhost` as our domain.
