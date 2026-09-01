@@ -41,6 +41,8 @@ Muhammad Owais Warsi is a full stack developer who builds products across the st
 
 ## Blog Posts
 
+- [Taste of Devops](https://owais.is-a.dev/blog/taste-of-devops/): Get the taste of devops. (Aug 31, 2026)
+- [How collaborative editor works under the hood.](https://owais.is-a.dev/blog/crdt-rga/): Explaining CRDT. (July 30, 2026)
 - [How Apache Cassandra reads and writes data](https://owais.is-a.dev/blog/apache-cassandra-working/): Blog on apache cassandra working. (April 5, 2026)
 - [How websites check whether a username exists in just milliseconds](https://owais.is-a.dev/blog/bloom-filters/): Bloom filters end to end. (June 3, 2026)
 - [Why do databases even use B-Trees](https://owais.is-a.dev/blog/b-tress/): Blog on B-Trees. (Jun 13, 2026)
@@ -48,7 +50,6 @@ Muhammad Owais Warsi is a full stack developer who builds products across the st
 - [Virtual Machines vs Containers: An In-Depth Comparison](https://owais.is-a.dev/blog/containerziation-vs-virtualisation/): Blog on virtual machines and containers. (Oct 29, 2023)
 - [Introduction to Arcjet](https://owais.is-a.dev/blog/introduction-to-arcjet/): Blog on arcjet. (Dec 9, 2024)
 - [How databases get switch on the fly when crashes](https://owais.is-a.dev/blog/keepalived-vrrp/): Blog on databases switching on the fly. (March 17, 2026)
-- [The gradient that changed everything. A practical introduction to neural networks](https://owais.is-a.dev/blog/neural-networks/): A practical introduction to neural networks. (May 24, 2026)
 - [Partitioning and Sharding: Why and when do companies need them](https://owais.is-a.dev/blog/partitioning-vs-sharding/): Blog on partitioning and sharding. (Feb 06, 2026)
 - [Using Postman for Real-World Traffic Testing](https://owais.is-a.dev/blog/postman-testing-traffic/): Blog on testing traffic using postman. (Aug 15, 2024)
 - [Getting started with val.town](https://owais.is-a.dev/blog/val-town/): Blog on val.town. (Sept 11, 2024)
