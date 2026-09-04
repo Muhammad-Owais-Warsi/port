@@ -196,16 +196,27 @@
     background-color: oklch(0.88 0.04 255 / 0.45);
     text-shadow: 0 0.5px 0 oklch(1 0 0 / 0.3);
 }
+.dark ::selection {
+    color: inherit;
+    background-color: oklch(0.45 0.10 255 / 0.6);
+}
 ::-moz-selection {
     color: inherit;
     background-color: oklch(0.88 0.04 255 / 0.45);
     text-shadow: 0 0.5px 0 oklch(1 0 0 / 0.3);
+}
+.dark ::-moz-selection {
+    color: inherit;
+    background-color: oklch(0.45 0.10 255 / 0.6);
 }
 
 .select-bg {
     display: inline-block;
     background-color: oklch(0.88 0.04 255 / 0.45);
     border-radius: 0.125rem;
+}
+.dark .select-bg {
+    background-color: oklch(0.45 0.10 255 / 0.6);
 }
 
 @layer components {
