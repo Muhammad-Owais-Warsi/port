@@ -138,8 +138,11 @@ function generateLlmsTxt(): string {
     for (const p of projects) {
         const stack = Array.isArray(p.stack) ? p.stack.join(", ") : p.stack;
         const desc = p.description.replace(/\.$/, "");
+        const rank = p.launched_position
+            ? ` — ${p.launched_position} Product of the Week on Peerlist`
+            : "";
         lines.push(
-            `- **${p.name}**: ${desc}. [Link](${p.url}) (${stack})`
+            `- **${p.name}**: ${desc}. [Link](${p.url}) (${stack})${rank}`
         );
     }
     lines.push("");
