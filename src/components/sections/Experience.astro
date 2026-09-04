@@ -1,29 +1,15 @@
 ---
-interface ExperienceItem {
-    title: string;
-    company: string;
-    location?: string;
-    start: string;
-    end?: string;
-}
+import { EXPERIENCES } from "../../data/experience";
 
 interface Props {
     heading?: string;
-    experiences?: ExperienceItem[];
 }
 
 const {
     heading = "Work Experience",
-    experiences = [
-        {
-            title: "Founding Engineering Intern",
-            company: "Cueron",
-            location: "Remote",
-            start: "Dec 2025",
-            end: "Jun 2026",
-        },
-    ],
 } = Astro.props;
+
+const experiences = EXPERIENCES;
 ---
 
 <section id="experience" class="py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
