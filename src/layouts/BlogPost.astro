@@ -24,6 +24,11 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
     ogType="article"
 >
     <link rel="stylesheet" href={katexStylesheet} crossorigin="anonymous" />
+    <div
+        id="progress-bar"
+        class="fixed top-0 left-0 h-[3px] bg-primary z-50 transition-[width] duration-100 ease-out"
+        style="width: 0%"
+    ></div>
     <HeadingSidebar headings={headings} toc={toc} />
     <article class="px-3 sm:px-4 pb-10 sm:pb-16 pt-4 sm:pt-6">
         <div class="mx-auto w-full max-w-4xl">
@@ -127,6 +132,18 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
         </div>
     </article>
     <script>
+        const progressBar = document.getElementById("progress-bar");
+        if (progressBar) {
+            window.addEventListener("scroll", () => {
+                const scrollTop = document.documentElement.scrollTop;
+                const scrollHeight =
+                    document.documentElement.scrollHeight -
+                    window.innerHeight;
+                const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+                progressBar.style.width = `${progress}%`;
+            });
+        }
+
         const shareBtn = document.getElementById("share-btn");
         shareBtn?.addEventListener("click", async () => {
             await navigator.clipboard.writeText(window.location.href);
