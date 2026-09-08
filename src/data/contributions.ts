@@ -12,6 +12,12 @@ export const CONTRIBUTIONS: Contribution[] = [
             "Zed is a high-performance, multiplayer code editor from the creators of Atom and Tree-sitter.",
     },
     {
+        name: "GPUI Kit",
+        url: "https://github.com/longbridge/gpui-kit/pulls?q=+is%3Apr+author%3A%40Muhammad-Owais-Warsi",
+        description:
+            "Rust GUI components for building fantastic cross-platform desktop applications using GPUI.",
+    },
+    {
         name: "Paykit",
         url: "https://github.com/getpaykit/paykit/pulls?q=+is%3Apr+author%3AMuhammad-Owais-Warsi+",
         description: "The billing framework for TypeScript.",

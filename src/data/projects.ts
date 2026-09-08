@@ -6,6 +6,8 @@ export interface Project {
     launched?: boolean;
     launched_url?: string;
     launched_position?: string;
+    latest?: boolean;
+    cherryPicked?: boolean;
 }
 
 export const PROJECTS: Project[] = [
@@ -14,6 +16,7 @@ export const PROJECTS: Project[] = [
         description: "Security layer for agents tool permissions.",
         url: "https://github.com/Muhammad-Owais-Warsi/agent-scope",
         stack: ["Typescript"],
+        cherryPicked: true,
     },
     {
         name: "Better Pay",
@@ -23,6 +26,7 @@ export const PROJECTS: Project[] = [
         launched: true,
         launched_url: "https://peerlist.io/owais786/project/better-pay",
         launched_position: "#1",
+        cherryPicked: true,
     },
     {
         name: "Flux",
@@ -32,6 +36,7 @@ export const PROJECTS: Project[] = [
         launched: true,
         launched_url: "https://peerlist.io/owais786/project/flux",
         launched_position: "#2",
+        cherryPicked: true,
     },
     {
         name: "ChimpType",
@@ -41,6 +46,7 @@ export const PROJECTS: Project[] = [
         launched: true,
         launched_url: "https://peerlist.io/neils/project/chimptype",
         launched_position: "#3",
+        cherryPicked: true,
     },
     {
         name: "Dodo Payments Rust SDK",
@@ -56,5 +62,13 @@ export const PROJECTS: Project[] = [
         launched: true,
         launched_url: "https://peerlist.io/owais786/project/zurl",
         launched_position: "#5",
+    },
+    {
+        name: "ttfx-js",
+        description: "A lightweight JavaScript toolkit for terminal text effects.",
+        url: "https://github.com/Muhammad-Owais-Warsi/ttfx-js",
+        stack: ["JavaScript"],
+        latest: true,
+        cherryPicked: true,
     },
 ];
