@@ -27,14 +27,16 @@ function parseTsArray(filePath: string, exportName: string): any[] {
     for (const block of objBlocks) {
         const obj: Record<string, string> = {};
         const pairs = block.matchAll(
-            /(\w+):\s*(?:"([^"]*)"|(\[[^\]]*\]))/g
+            /(\w+):\s*(?:"([^"]*)"|(\[[^\]]*\])|(true|false))/g
         );
-        for (const [, key, strVal, arrVal] of pairs) {
+        for (const [, key, strVal, arrVal, boolVal] of pairs) {
             if (arrVal) {
                 obj[key] = arrVal
                     .replace(/[\[\]"]/g, "")
                     .split(",")
                     .map((s: string) => s.trim());
+            } else if (boolVal) {
+                obj[key] = boolVal === "true";
             } else {
                 obj[key] = strVal;
             }

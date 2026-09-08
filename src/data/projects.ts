@@ -12,6 +12,14 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
     {
+        name: "ttfx-js",
+        description: "A lightweight JavaScript toolkit for terminal text effects.",
+        url: "https://github.com/Muhammad-Owais-Warsi/ttfx-js",
+        stack: ["JavaScript"],
+        latest: true,
+        cherryPicked: true,
+    },
+    {
         name: "Agent Scope",
         description: "Security layer for agents tool permissions.",
         url: "https://github.com/Muhammad-Owais-Warsi/agent-scope",
@@ -62,13 +70,5 @@ export const PROJECTS: Project[] = [
         launched: true,
         launched_url: "https://peerlist.io/owais786/project/zurl",
         launched_position: "#5",
-    },
-    {
-        name: "ttfx-js",
-        description: "A lightweight JavaScript toolkit for terminal text effects.",
-        url: "https://github.com/Muhammad-Owais-Warsi/ttfx-js",
-        stack: ["JavaScript"],
-        latest: true,
-        cherryPicked: true,
     },
 ];
