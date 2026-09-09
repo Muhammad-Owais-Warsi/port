@@ -1,0 +1,210 @@
+---
+title: "Docker Notes"
+description: "Quick notes on Docker."
+pubDate: "Sep 09 2026"
+heroImage: './header.jpg'
+---
+
+The problem was, to share the software or code you need to setup and install dependencies on other machines as well. This give rise to a lot issues and conflicts related to dependencies and especially -> **"It works on my machine!".**
+
+Docker solves this by **creating a wrapper over your code and call it as a container**. Now you **share this container in the form of a file or configuration known as image**. 
+
+Other users run this image and get the container running isolated from their machine with the exact same code and dependencies and just dump the container and image whenever they want.
+
+
+## Image vs Container
+ - Image is like a blueprint or a configuration file for the machinery (container).
+ - Container is the machine that is running on the machine based on the above image.
+
+
+## Commands
+To run any container we need to run the following command
+
+```
+docker run <image_name>
+```
+
+The container will run as long as there is at least one main process running inside it. If you try to run an `ubuntu` container using the above command it will start and destroy the container the very next second. 
+
+Therefore we use flags such as 
+
+```
+docker run -it ubuntu:latest
+```
+
+- `-it` : is a flag and combination of 2 things, `-i` (interactive) and `-t` (TTY terminal). This gives you control of interactive terminal for the running container. 
+
+- `latest` : this is the version, so we get the latest version of ubuntu.
+
+
+So basically the process is
+
+```
+docker run <image_name>
+        │
+        ▼
+Is the image available locally?
+        │
+   ┌────┴────┐
+  YES        NO
+   │          │
+   ▼          ▼
+Use local    Pull image
+image        from registry
+   │          │
+   └────┬─────┘
+        ▼
+ Create a new container
+        │
+        ▼
+   Run the container
+```
+
+Now to execute the commands inside the running container, we make use of `exec` command.
+
+```
+docker exec <container_name_or_id> <command>
+```
+
+The next question is how to expose and access the running applications inside the container. We make use of port mapping using `-p` flag.
+
+```
+docker run -it -p <machine_port><container_port> ubuntu:latest
+```
+
+You can expose any number of ports you want.
+
+Sometimes we need to pass environment variables to the containers. For that we make use of `-e` flag.
+
+```
+docker run -it -p <machine_port><container_port> -e <key><value> ubuntu:latest
+```
+
+
+## How to dockerise the applications?
+
+We create `Dockerfile` and write the configuration to run the container.
+
+### Steps
+1. We bring the base image (it maybe a bare metal ubuntu image or a node image depends on the usecase) using `RUN`.
+2. We then copy our code inside the container using `COPY`. Install the required deps using `RUN`.
+3. At last we set the `ENTRYPOINT` , which will always run when someone starts the container. 
+
+Example
+```docker
+FROM ubuntu
+
+# 1. Install curl, git, and the required compilation tools (build-essential)
+RUN apt update && apt install -y curl git build-essential
+
+# 2. Set the environment variables for n-install before running the script
+ENV N_PREFIX="/root/n"
+ENV PATH="$N_PREFIX/bin:$PATH"
+
+# 3. Install Node.js version 24 using n-install
+RUN curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s -- -y 24
+
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+COPY index.js index.js
+# 4. Now npm will be found natively
+RUN npm install
+
+COPY index.js index.js
+
+# Fixed the syntax for ENTRYPOINT (added comma separating strings)
+ENTRYPOINT ["node", "index.js"]
+```
+
+After creating this file, we can create an image from it and publish to dockerhub if we want.
+
+To create an image from Dockerfile
+```
+docker build -t <image_name> <image_path>
+```
+
+Now you can simply run this image and pass the ports and env as usual.
+
+
+## Caching
+Docker follows layer caching.
+This means if you change a particular step all the steps or layer under it will be rebuild again. Therefore we need to be careful when writing dockerfile.
+
+```text
+Dockerfile
+    │
+    ▼
+┌──────────────┐
+│ FROM node    │  ← Layer 1
+└──────────────┘
+       │
+       ▼
+┌──────────────┐
+│ COPY package │  ← Layer 2
+│ .json        │
+└──────────────┘
+       │
+       ▼
+┌──────────────┐
+│ RUN npm      │  ← Layer 3
+│ install      │
+└──────────────┘
+       │
+       ▼
+┌──────────────┐
+│ COPY . .     │  ← Layer 4
+└──────────────┘
+```
+If nothing changes
+```
+Layer 1  ✓ cached
+   ↓
+Layer 2  ✓ cached
+   ↓
+Layer 3  ✓ cached
+   ↓
+Layer 4  ✓ cached
+```
+If package.json changes
+```
+Layer 1  ✓ cached
+   ↓
+Layer 2  ✗ changed
+   ↓
+Layer 3  ✗ rebuilt
+   ↓
+Layer 4  ✗ rebuilt
+```
+
+## Docker compose
+In production or big applications we might need to run multiple images at once to run an app. In such cases we make use of `docker-compose.yml` file. You can think of it as an orchestrator of containers.
+
+Example
+```
+version: '3.8'
+
+services:
+   postgres:
+      image: 'postgres'
+      ports:
+        - 5432:5432
+      environment:
+          <key>:<value>
+
+
+  redis:
+    image: 'redis'
+    ports: 
+     - 6379:6379
+```
+
+Now we can run the following command to run all these containers at once
+
+```
+docker compose up
+```
+
+To bring all of them down
+```
+docker compose down 
+```

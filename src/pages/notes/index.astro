@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import NoteList from "../../components/notes/NoteList.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+
+const posts = (await getCollection("notes")).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const pageTitle = `Notes`;
+const pageDescription = "Quick notes and references";
+---
+
+<SiteLayout
+    title={pageTitle}
+    description={pageDescription}
+    image="/og.png"
+>
+    <section class="mx-auto w-full max-w-3xl px-3 sm:px-4 py-6 sm:py-8">
+        <div class="mb-6 sm:mb-8">
+            <h1
+                class="text-balance text-xl sm:text-2xl font-semibold tracking-tight"
+            >
+                {pageTitle}
+            </h1>
+        </div>
+        <NoteList posts={posts} />
+    </section>
+</SiteLayout>
