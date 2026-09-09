@@ -86,7 +86,7 @@ docker run -it -p <machine_port><container_port> -e <key><value> ubuntu:latest
 We create `Dockerfile` and write the configuration to run the container.
 
 ### Steps
-1. We bring the base image (it maybe a bare metal ubuntu image or a node image depends on the usecase) using `RUN`.
+1. We bring the base image (it maybe a bare metal ubuntu image or a node image depends on the usecase) using `FROM`.
 2. We then copy our code inside the container using `COPY`. Install the required deps using `RUN`.
 3. At last we set the `ENTRYPOINT` , which will always run when someone starts the container. 
 
