@@ -82,6 +82,29 @@ function generateLlmsTxt(): string {
                 new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
         );
 
+    // Read notes
+    const notesDir = path.join(srcDir, "content/notes");
+    const notesEntries = fs
+        .readdirSync(notesDir)
+        .filter((f) => fs.statSync(path.join(notesDir, f)).isDirectory())
+        .map((dir) => {
+            const mdxPath = path.join(notesDir, dir, "index.mdx");
+            const mdPath = path.join(notesDir, dir, "index.md");
+            const filePath = fs.existsSync(mdxPath) ? mdxPath : mdPath;
+            const content = fs.readFileSync(filePath, "utf-8");
+            const fm = parseFrontmatter(content);
+            return {
+                title: fm.title ?? dir,
+                description: fm.description ?? "",
+                pubDate: fm.pubDate ?? "",
+                slug: dir,
+            };
+        })
+        .sort(
+            (a, b) =>
+                new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+        );
+
     // Parse data from TS files
     const projects = parseTsArray(
         path.join(srcDir, "data/projects.ts"),
@@ -110,6 +133,9 @@ function generateLlmsTxt(): string {
     );
     lines.push(
         "- [Blog](https://owais.is-a.dev/blog/): Collection of technical blog posts."
+    );
+    lines.push(
+        "- [Notes](https://owais.is-a.dev/notes/): Quick notes and references."
     );
     lines.push(
         "- [RSS Feed](https://owais.is-a.dev/rss.xml): Subscribe to new blog posts."
@@ -161,6 +187,15 @@ function generateLlmsTxt(): string {
         const date = formatDate(post.pubDate);
         lines.push(
             `- [${post.title}](https://owais.is-a.dev/blog/${post.slug}/): ${post.description} (${date})`
+        );
+    }
+    lines.push("");
+    lines.push("## Notes");
+    lines.push("");
+    for (const note of notesEntries) {
+        const date = formatDate(note.pubDate);
+        lines.push(
+            `- [${note.title}](https://owais.is-a.dev/notes/${note.slug}/): ${note.description} (${date})`
         );
     }
     lines.push("");
