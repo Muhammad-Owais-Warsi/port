@@ -1,0 +1,110 @@
+---
+title: "Docker - 2"
+description: "Quick notes on Docker - 2."
+pubDate: "Sep 12 2026"
+heroImage: './header.jpg'
+---
+
+## Introduction
+We have covered most of the basic stuff in [part 1](https://owais.is-a.dev/notes/docker/). This part covers networking, volumes, and optimisation of the Dockerfile from the previous part.
+
+## Networking in Containers
+**Ability of a container to communicate with other containers or non-container objects** is known as networking.
+
+Try running a container with the following command
+```
+docker run -it ubuntu:latest
+```
+
+Run the following command
+```
+ping google.com
+```
+
+You'll notice it works perfectly, but the question arises why? 
+- Aren't the containers isolated?
+- How are they able to call something that lives outside them?
+
+**Containers have networking enabled by default, and they can make outgoing connections.** Whenever a container starts, it has a built-in network enabled known as `bridge`, which lets containers communicate with the outside world.
+
+These network types can also be called `drivers`. There are several types of drivers that we can use when creating and running containers. You can read them [here](https://docs.docker.com/engine/network/drivers/)
+
+- `bridge`: the default network type of the container.
+- `host`: removes network isolation between the container and the host by connecting it directly to the host network, so basically you don't need to specify any ports when creating a container.
+- `none`: container has no access to network.
+
+To see the containers using a specific network
+```
+docker network inspect bridge // or any network driver instead of bridge
+```
+
+To view the complete list of available networks
+```
+docker network ls
+```
+
+As mentioned, containers by default run on the `bridge` network. To run one on some other network:
+```
+docker run -it --network=<network_name> <image_name>
+```
+
+### Custom Networks
+In Docker, apart from using the default networks, you may create your own network and run containers on it very easily.
+
+To create a custom network
+```
+docker network create -d <network_type_or_driver> <network_custom_name>
+```
+Then you can run the container with the `--network` flag.
+
+> Containers on the same network can communicate with each other. To prove this, you may try running 2 containers simultaneously on the same network and ping the other container using `ping <container_name>`. If you receive the packets successfully, the communication is successful.
+
+## Volumes
+Data in containers is temporary. It lives only while the container is running. To persist the data even after stopping the container, we use `volumes`.
+
+You can create anything as a volume and persist your data.
+
+This command makes a folder from the host machine as its volume:
+
+```
+docker run -it -v <host_folder_path>:<container_folder_path> <image>
+```
+
+We can also create our own volumes:
+```
+docker volume create <volume_name>
+```
+
+## Optimisations on Dockerfile
+This was the Dockerfile we made in the previous part.
+```dockerfile
+FROM ubuntu
+
+RUN apt update && apt install -y curl git build-essential
+
+ENV N_PREFIX="/root/n"
+ENV PATH="$N_PREFIX/bin:$PATH"
+
+RUN curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s -- -y 24
+
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+COPY index.js index.js
+
+RUN npm install
+
+COPY index.js index.js
+
+
+ENTRYPOINT ["node", "index.js"]
+```
+
+The first few points may not directly optimise the image, but at least make the wording and Dockerfile a bit easier to read and write.
+
+1. Instead of bringing the `ubuntu` image, we can directly use the `node` image, so we don't need to install Node afterwards. Additionally, we may use `node:alpine` for the lightweight version of Node.
+
+2. Instead of copying each file one by one, copy them directly like `COPY . .`. But this can clutter the container, hence we declare a working directory using `WORKDIR <name>`.
+
+3. We can notice `npm install` runs every time, whether or not any dependency changed. As discussed in the previous part about layer caching, we can avoid rebuilding this step by moving the install command a few lines up.
+
+4. Sometimes you may not need some files inside the image, so you can create a `.dockerignore` file to ignore them.
