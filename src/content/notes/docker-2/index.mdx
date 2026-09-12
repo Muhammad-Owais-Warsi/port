@@ -108,3 +108,19 @@ The first few points may not directly optimise the image, but at least make the 
 3. We can notice `npm install` runs every time, whether or not any dependency changed. As discussed in the previous part about layer caching, we can avoid rebuilding this step by moving the install command a few lines up.
 
 4. Sometimes you may not need some files inside the image, so you can create a `.dockerignore` file to ignore them.
+
+Here is the updated dockerfile
+
+```dockerfile
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN npm install
+
+COPY . .
+
+ENTRYPOINT ["node", "index.js"]
+```
