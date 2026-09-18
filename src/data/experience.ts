@@ -7,6 +7,7 @@ export interface ExperienceItem {
 }
 
 export const EXPERIENCES: ExperienceItem[] = [
+    {title: "Software Intern", company: "Ressl AI (YC W26)", location: "Remote", start: "Sept 2026", end: "Present"},
     {
         title: "Founding Engineering Intern",
         company: "Cueron",
