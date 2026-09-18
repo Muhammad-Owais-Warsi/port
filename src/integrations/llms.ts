@@ -156,16 +156,17 @@ function generateLlmsTxt(): string {
         const period = exp.end
             ? `${exp.start} to ${exp.end}`
             : `${exp.start} to Present`;
+        const typeSuffix = exp.type ? ` (${exp.type})` : "";
         lines.push(
-            `- **${exp.title}** at ${exp.company} (${exp.location ?? "Remote"}) — ${period}`
+            `- **${exp.role}** at ${exp.company}${typeSuffix} — ${period}`
         );
     }
     lines.push("");
     lines.push("## Projects");
     lines.push("");
     for (const p of projects) {
-        const stack = Array.isArray(p.stack) ? p.stack.join(", ") : p.stack;
-        const desc = p.description.replace(/\.$/, "");
+        const stack = Array.isArray(p.stack) ? p.stack.join(", ") : (p.stack ?? "");
+        const desc = (p.description ?? "").replace(/\.$/, "");
         const rank = p.launched_position
             ? ` — ${p.launched_position} Product of the Week on Peerlist`
             : "";
@@ -177,7 +178,7 @@ function generateLlmsTxt(): string {
     lines.push("## Open Source Contributions");
     lines.push("");
     for (const c of contributions) {
-        const desc = c.description.replace(/\.$/, "");
+        const desc = (c.description ?? "").replace(/\.$/, "");
         lines.push(`- **${c.name}**: ${desc}. [Link](${c.url})`);
     }
     lines.push("");
