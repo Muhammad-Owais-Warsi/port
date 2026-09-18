@@ -1,18 +1,27 @@
 export interface ExperienceItem {
-    title: string;
+    role: string;
     company: string;
-    location?: string;
+    type?: string;
     start: string;
     end?: string;
+    logo?: string;
 }
 
 export const EXPERIENCES: ExperienceItem[] = [
-    {title: "Software Intern", company: "Ressl AI (YC W26)", location: "Remote", start: "Sept 2026", end: "Present"},
     {
-        title: "Founding Engineering Intern",
+        role: "Software Engineer",
+        company: "Ressl AI (YC W26)",
+        type: "Intern",
+        start: "Sept 2026",
+        end: "Present",
+        logo: "/logo/ressl.jpg",
+    },
+    {
+        role: "Founding Engineer",
         company: "Cueron",
-        location: "Remote",
+        type: "Intern",
         start: "Dec 2025",
         end: "Jun 2026",
+        logo: "/logo/cueron.jpg",
     },
 ];

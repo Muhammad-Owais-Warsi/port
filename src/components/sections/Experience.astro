@@ -24,24 +24,41 @@ const experiences = EXPERIENCES;
             {
                 experiences.map((item) => (
                     <div class="relative group">
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1 sm:gap-2 mb-3 sm:mb-4">
-                            <div class="space-y-1">
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">
-                                    {item.title}
-                                </h3>
-                                <div class="text-foreground/70 font-semibold text-xs sm:text-sm">
-                                    <span>{item.company}</span>
-                                    {item.location && (
-                                        <span class="text-foreground/60">
-                                            {" "}
-                                            · {item.location}
-                                        </span>
-                                    )}
+                        <div class="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
+                            {item.logo ? (
+                                <img
+                                    src={item.logo}
+                                    alt={`${item.company} logo`}
+                                    loading="lazy"
+                                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover shrink-0 border "
+                                />
+                            ) : (
+                                <div
+                                    aria-hidden="true"
+                                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-full shrink-0 flex items-center justify-center bg-foreground/10 text-foreground font-bold text-sm sm:text-base"
+                                >
+                                    {item.company.slice(0, 1)}
                                 </div>
-                            </div>
+                            )}
+                            <div class="flex-1 flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1 sm:gap-2">
+                                <div class="space-y-1">
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">
+                                        {item.company}
+                                    </h3>
+                                    <div class="text-foreground/70 font-semibold text-xs sm:text-sm">
+                                        <span>{item.role}</span>
+                                        {item.type && (
+                                            <span class="text-foreground/60">
+                                                {" "}
+                                                | {item.type}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
 
-                            <div class="text-xs sm:text-sm font-semibold text-foreground/70 whitespace-nowrap">
-                                {item.start} — {item.end ?? "Present"}
+                                <div class="text-xs sm:text-sm font-semibold text-foreground/70 whitespace-nowrap">
+                                    {item.start} — {item.end ?? "Present"}
+                                </div>
                             </div>
                         </div>
                     </div>
