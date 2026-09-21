@@ -1,0 +1,127 @@
+---
+title: "AI Benchmark on tips"
+description: "What popular AI benchmarks actually test, one benchmark at a time."
+pubDate: "June 3 2026"
+heroImage: "./header.jpg"
+toc:
+  - "Introduction"
+  - "Benchmarks"
+  - "Conclusion"
+---
+
+import BenchmarkCarousel from "../../../components/blog/BenchmarkCarousel.astro";
+
+export const benchmarks = [
+  {
+    name: "HumanEval",
+    created: "OpenAI · July 2021",
+    paper: "https://arxiv.org/abs/2107.03374",
+    claim: "That it measures a model's ability to write code.",
+    tests: "Whether a model can write small, self-contained Python functions from a docstring and function signature. It ships 164 hand-written problems, each graded by hidden unit tests. This is the foundational 'can it code at all' check that every code model gets measured against.",
+    critiques: "Just 164 problems. It has been saturated for years and the problems are almost certainly in every model's training data. The tasks are toy-sized isolated functions, nothing like the real codebases most developers work in.",
+    score: "The percentage of problems solved, usually reported as pass@1 (solved on the first try) or pass@k (solved within k tries).",
+  },
+  {
+    name: "SWE-bench Verified",
+    created: "Princeton & Stanford Universities · October 2023, Verified subset with OpenAI · August 2024",
+    paper: "",
+    claim: "That it measures real-world software engineering ability.",
+    tests: "Small bug fixes in 12 popular Python repos, many of them 1 to 2 line changes, and likely already in the model's training data. It says nothing about your TypeScript monorepo. SWE-bench Verified is the human-filtered 500-task subset where annotators confirmed every task is clear, solvable, and correctly tested.",
+    critiques: "A [Scale AI paper](https://arxiv.org/abs/2410.06992) found that 161 of the 500 Verified tasks need only 1 to 2 lines to fix. A [University of Waterloo study](https://arxiv.org/abs/2410.12663) suggests many models have the SWE-bench dataset in their training data, giving them an unfair edge. It is also Python-only across public repos, so it says nothing about your codebase.",
+    score: "The percentage of tasks where the model produced code that passed all tests from the original PR without breaking existing tests.",
+  },
+  {
+    name: "LiveCodeBench",
+    created: "UC Berkeley, MIT, and Cornell · January 2024",
+    paper: "https://arxiv.org/abs/2403.07974",
+    claim: "A holistic, contamination-free measure of coding ability.",
+    tests: "Competitive-programming style problem solving pulled from LeetCode, Codeforces, and AtCoder contests. The key idea is freshness: new problems stream in continuously, so a model cannot win by memorizing old tests. It also goes beyond code generation into self-repair, code execution, and test-output prediction.",
+    critiques: "Competitive-programming puzzles are a narrow slice of real-world coding work. And even though new problems are added continuously, they can still leak into training data within months of being published.",
+    score: "The pass rate across scenarios, averaged over freshly collected problems so the number reflects current ability, not memorized answers.",
+  },
+  {
+    name: "FrontierCode",
+    created: "Cognition · June 2026",
+    paper: "https://cognition.com/blog/frontier-code",
+    claim: "That it measures whether a model writes production-ready code.",
+    tests: "Frontier-level software engineering on real open-source repos, with tasks crafted by the repos' own maintainers (20+ developers, 40+ hours per task). The grading standard is mergeability: would the maintainer actually merge this PR? An ensemble of unit tests, rubrics, and verifiers scores correctness, test quality, scope discipline, and style.",
+    critiques: "The tasks are not public, which protects against contamination but makes independent verification impossible. Rubric-based grading is also inherently subjective. It is too new to have a real track record.",
+    score: "The rubric score on the task set (Diamond: 50 hardest, Main: 100, Extended: all 150), which is effectively the share of patches a maintainer would actually merge.",
+  },
+  {
+    name: "Terminal-Bench",
+    created: "Stanford University and the Laude Institute · August 2025",
+    paper: "https://arxiv.org/abs/2506.14972",
+    claim: "That it measures an agent's ability to do real terminal work.",
+    tests: "Whether an agent can actually operate a terminal. Tasks run inside a sandboxed container: installing packages, debugging scripts, wrangling files. Grading checks the final system state with deterministic verifiers instead of an LLM judge.",
+    critiques: "Agents get full internet access during the test. The authors [acknowledge in the paper](https://arxiv.org/abs/2506.14972) that nothing actively prevents a model from looking up benchmark tasks online. They just say they have not observed it happening.",
+    score: "The percentage of tasks where the post-run tests passed, meaning the agent actually finished the job in the sandbox.",
+  },
+  {
+    name: "MMLU",
+    created: "UC Berkeley, Columbia University, and UChicago · September 2020",
+    paper: "https://arxiv.org/abs/2009.03300",
+    claim: "Massive multitask language understanding, broad general knowledge.",
+    tests: "Multiple-choice recall across 57 subjects, knowing the answer, not reasoning to it. Many questions carry errors and a heavy North America and Europe bias. It answers how much does the model know and remains the yardstick every general model is compared against.",
+    critiques: "A [Cohere For AI paper](https://arxiv.org/abs/2406.03578) found 28% of MMLU questions require culturally sensitive knowledge, with 84.9% of that skewed toward North America and Europe, enough to shift model rankings. A [University of Edinburgh study](https://arxiv.org/abs/2406.04127) found errors in over half of the sampled virology questions. Top models are now scoring above 90%, so it is effectively saturated. OpenAI has already dropped it in favour of MMLU-Pro.",
+    score: "The percentage of questions answered correctly, averaged across all 57 subjects.",
+  },
+  {
+    name: "GPQA Diamond",
+    created: "NYU, Penn, and Oxford · November 2023",
+    paper: "https://arxiv.org/abs/2311.12022",
+    claim: "Expert-level scientific reasoning, Google-proof even for PhDs.",
+    tests: "198 multiple-choice science questions which frontier models are now scoring 90%+ on, meaning this one is nearly saturated. The Diamond split keeps only items both expert validators got right while most non-experts got wrong.",
+    critiques: "Just 198 questions is a small dataset to draw conclusions from. GPQA author David Rein has [written openly about errors](https://davidrein.substack.com/p/can-good-benchmarks-contain-mistakes) in the dataset. Frontier models are already scoring above 90%, so it is close to saturated. [Epoch AI's analysis](https://epochai.org/blog/gpqa-diamond-whats-left) of what is left confirms there is not much headroom.",
+    score: "The percentage of the 198 Diamond questions answered correctly.",
+  },
+  {
+    name: "Humanity's Last Exam (HLE)",
+    created: "Center for AI Safety and Scale AI · January 2025",
+    paper: "https://arxiv.org/abs/2501.14249",
+    claim: "The final academic exam for AI, the last word on expert knowledge.",
+    tests: "2,500 expert-written questions across 100+ subjects, deliberately built to be the final closed-ended academic test AI has not saturated. A private held-out set guards against overfitting.",
+    critiques: "A [Future House investigation](https://www.futurehouse.org/research-posts/hle) found roughly 29% of the biology and chemistry questions are contradicted by peer-reviewed research. The benchmark's own follow-up confirmed 18% were wrong. It is also closed-ended Q&A, so it tests what models know, not what they can actually do. The name itself has been criticised for being overly sensational, setting expectations that do not match reality.",
+    score: "Accuracy across the question set, and it stays low for every frontier model, which is exactly the point.",
+  },
+  {
+    name: "ARC-AGI",
+    created: "Francois Chollet · November 2019",
+    paper: "https://arxiv.org/abs/1911.01547",
+    claim: "General, fluid intelligence, progress toward AGI itself.",
+    tests: "Solving abstract grid puzzles, and it is genuinely unclear how that maps to agentic coding, tool use, or anything you would actually deploy. It measures skill-acquisition efficiency: how fast a system learns new rules from a few examples.",
+    critiques: "There is no widely agreed definition of AGI, so calling this a test of general intelligence is doing a lot of heavy lifting. ARC-AGI v1 also proved [susceptible to brute-force approaches](https://arcprize.org/blog/2024-results-and-analysis), which is why v2 was released with harder tasks. It is also hard to connect a score on abstract grid puzzles to anything practical like agentic coding or tool use.",
+    score: "The percentage of tasks solved correctly within 3 attempts per task.",
+  },
+  {
+    name: "tau-bench",
+    created: "Sierra and Princeton University · June 2024",
+    paper: "",
+    claim: "That agents can reliably complete real-world customer tasks.",
+    tests: "Chatting with a simulated user against toy-clean database schemas, a starting point, not proof an agent survives a real support queue. The agent converses with a simulated user, calls mock APIs, queries databases, and must follow company policy while actually resolving the request. Scored against verifiable database outcomes.",
+    critiques: "The [Opus 4.5 system card](https://www.anthropic.com/research/claude-opus-4-5) documents cases where the model found loopholes to solve tasks that were designed to be unsolvable. The benchmark also uses the same LLM to play both the customer and the agent, making it unclear whether the model got better at being an agent, a user, or both. OpenAI quietly excluded the airline subset from GPT-5.2 results, citing grading quality, without explaining further.",
+    score: "The share of tasks where every check passed, tracked with the pass^k metric, passing the same task k times in a row, so consistency counts.",
+  },
+  {
+    name: "ITSM Bench",
+    created: "Atomicwork and New Measure · August 2026",
+    paper: "https://github.com/new-measure/ITSMBench",
+    claim: "That agents can do real enterprise IT service management work.",
+    tests: "IT service management work: resolving employee tickets, triaging incidents, and following runbooks inside a simulated enterprise of 42 mocked apps, around 1,800 database tables, and 2,000+ REST endpoints. 89 expert-written tasks graded by deterministic verifiers on the final environment state, no LLM judge.",
+    critiques: "It is brand new and unproven, with only 89 tasks covering a slice of ITSM domains. It was also built by Atomicwork, a vendor with a product to sell in the same space, which raises obvious conflict-of-interest questions. Worth watching whether independent labs start adopting it.",
+    score: "Pass@1: the percentage of tickets fully resolved on the first attempt, with cost and output tokens reported alongside.",
+  },
+];
+
+## Introduction
+Benchmark is a really vital piece for any product. It's like parenting your product to make it better than before. AI Benchmark is something that makes your model or agents better in their work. Today we gonna see about some really talked AI Benchmarks, what they actually measure and how.
+
+## Credits
+This is inspired by an [article](https://ngrok.com/blog/ai-benchmarks) from [ngrok](https://ngrok.com/), written by [Same Rose](https://x.com/samwhoo). I've picked some pieces of content from their. Thank you for providing such curated information.
+
+## Benchmarks
+
+<BenchmarkCarousel benchmarks={benchmarks} />
+
+## Conclusion
+Benchmarks are the parenting manual for AI products: each one isolates a different skill, from writing a ten-line function to reasoning through a novel puzzle to closing a real support ticket. No single score tells the whole story, so read them as a panel, not a leaderboard. Pick the benchmarks that mirror what your users will actually ask the model to do and keep on improving.
