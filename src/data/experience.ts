@@ -12,7 +12,7 @@ export const EXPERIENCES: ExperienceItem[] = [
         role: "Software Engineer",
         company: "Ressl AI (YC W26)",
         type: "Intern",
-        start: "Sept 2026",
+        start: "Sep 2026",
         end: "Present",
         logo: "/logo/ressl.jpg",
     },
