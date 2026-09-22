@@ -25,9 +25,9 @@ function parseLinks(text: string): string {
 <div class="benchmark-carousel not-prose my-6">
     <div class="relative border border-border rounded-lg bg-card overflow-hidden">
         <!-- Cards -->
-        <div class="cards-container relative" style="height: 490px;">
+        <div class="cards-container relative">
             {benchmarks.map((b, i) => (
-                <div class:list={["card p-5 sm:p-6 absolute inset-0", { hidden: i !== 0 }]} data-index={i}>
+                <div class:list={["card p-5 sm:p-6", { hidden: i !== 0 }]} data-index={i}>
                     <div class="mb-4">
                         <div class="flex items-start justify-between gap-2">
                             <h3 class="text-base font-semibold text-foreground">{b.name}</h3>
@@ -112,6 +112,24 @@ function parseLinks(text: string): string {
         const total = cards.length;
         let current = 0;
 
+        function lockHeight() {
+            // Show all cards in flow to measure their real height at current width
+            cards.forEach((card) => card.classList.remove("hidden"));
+            cardsContainer.style.minHeight = "";
+            let maxHeight = 0;
+            cards.forEach((card) => {
+                maxHeight = Math.max(maxHeight, card.getBoundingClientRect().height);
+            });
+            cardsContainer.style.minHeight = maxHeight + "px";
+            // Hide all except current
+            cards.forEach((card, i) => {
+                if (i !== current) card.classList.add("hidden");
+            });
+        }
+
+        lockHeight();
+        window.addEventListener("resize", lockHeight);
+
         function goTo(index: number) {
             cards[current].classList.add("hidden");
             dots[current].classList.remove("bg-primary");
@@ -120,6 +138,8 @@ function parseLinks(text: string): string {
             current = index;
 
             cards[current].classList.remove("hidden");
+            // scroll card into view if needed
+            cardsContainer.scrollTop = 0;
             dots[current].classList.remove("bg-border");
             dots[current].classList.add("bg-primary");
 
