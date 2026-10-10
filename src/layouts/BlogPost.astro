@@ -5,6 +5,7 @@ import type { MarkdownHeading } from "astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import SiteLayout from "./SiteLayout.astro";
 import HeadingSidebar from "../components/blog/HeadingSidebar.astro";
+import PrintButton from "../components/blog/PrintButton.astro";
 
 const katexStylesheet =
     "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
@@ -53,7 +54,7 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
                 </p>
                 {
                     updatedDate && (
-                        <p class="mt-1 text-xs italic text-muted-foreground/70">
+                        <p class="mt-1 text-xs italic text-muted-foreground/70 print:hidden">
                             Last updated on <FormattedDate date={updatedDate} />
                         </p>
                     )
@@ -63,7 +64,7 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
                 >
                     {title}
                 </h1>
-                <div class="mt-4 flex items-center justify-center gap-4">
+                <div class="mt-4 flex items-center justify-center gap-4 print:hidden">
                     <button
                         id="share-btn"
                         class="inline-flex items-center gap-2 text-xs sm:text-sm text-muted-foreground hover:text-primary"
@@ -94,6 +95,8 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
                         >
                         Share
                     </button>
+                    <span class="text-border">|</span>
+                    <PrintButton />
                 </div>
                 <hr class="mt-6 border-border" />
             </div>
@@ -103,7 +106,7 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
                 <slot />
             </div>
             <div
-                class="mt-8 pt-6 border-t border-border flex items-center justify-center"
+                class="mt-8 pt-6 border-t border-border flex items-center justify-center print:hidden"
             >
                 <a
                     href="/rss.xml"
@@ -128,6 +131,9 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
                     >
                     Subscribe RSS Feed
                 </a>
+            </div>
+            <div class="hidden print:block mt-8 pt-4 border-t border-neutral-300 text-center">
+                <p class="text-sm text-black">Muhammad Owais Warsi</p>
             </div>
         </div>
     </article>

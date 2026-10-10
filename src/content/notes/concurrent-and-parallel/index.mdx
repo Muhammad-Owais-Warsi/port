@@ -1,0 +1,28 @@
+---
+title: "Concurrency and Parallelism"
+description: "Quick notes on concurrency and parallelism."
+pubDate: "Oct 10 2026"
+heroImage: "header.png"
+---
+
+This one is the most confusing concept in computer science as there is only a very thin difference between them.
+
+## Concurrency
+When a program handles multiple tasks in a manner that there is no order of execution or completion i.e it can jump from one task to other without even completing the one in-progress. 
+
+Example: There is one chef in a kitchen handling cooking multiple dishes at the same time. He might finish cooking dish A and then move to dish B, or cook half of dish A and then dish B or maybe switch between them at set interval of time. 
+
+
+## Parallelism
+When program processes multiple tasks at the same time or simultaneously, then we say parallelism is taking place. 
+
+Example: There are multiple chefs in the kitchen now. Each one is assigned to respective dishes and they cook them. There is no load of work on a single chef itself.
+
+
+## Which one is better
+Which one is better and when to use what really depends on the usecase and there is no one correct answer to this. 
+
+Parallelism looks a much better solution as you may think there are multiple workers (cores) -> less time in completion. But at the same time it introduces complexity of implementation where you've to manage states and what not between these workers and keep them in sync
+
+
+Concurrency is easier in implementation as it removes the overhead of synchronisation, but it raises the time of completion as the tasks have to wait until a single worker is attending someone else.

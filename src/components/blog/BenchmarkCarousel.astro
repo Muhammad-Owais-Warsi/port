@@ -67,7 +67,7 @@ function parseLinks(text: string): string {
         </div>
 
         <!-- Navigation -->
-        <div class="flex items-center justify-between px-4 py-3 border-t border-border">
+        <div class="flex items-center justify-between px-4 py-3 border-t border-border print:hidden">
             <button
                 class="prev-btn flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed text-foreground"
                 aria-label="Previous"
@@ -90,7 +90,7 @@ function parseLinks(text: string): string {
     </div>
 
     <!-- Dots -->
-    <div class="dots flex items-center justify-center gap-1.5 mt-3 flex-wrap">
+    <div class="dots flex items-center justify-center gap-1.5 mt-3 flex-wrap print:hidden">
         {benchmarks.map((_, i) => (
             <button
                 class:list={["dot w-1.5 h-1.5 rounded-full", i === 0 ? "bg-primary" : "bg-border"]}
@@ -172,5 +172,19 @@ function parseLinks(text: string): string {
 
         // init state
         nextBtn.disabled = total <= 1;
+
+        // Print: expand all cards sequentially, restore after.
+        const expandForPrint = () => {
+            cards.forEach((card) => card.classList.remove("hidden"));
+            cardsContainer.style.minHeight = "";
+        };
+        const restoreAfterPrint = () => {
+            cards.forEach((card, i) => {
+                if (i !== current) card.classList.add("hidden");
+            });
+            lockHeight();
+        };
+        window.addEventListener("beforeprint", expandForPrint);
+        window.addEventListener("afterprint", restoreAfterPrint);
     });
 </script>
