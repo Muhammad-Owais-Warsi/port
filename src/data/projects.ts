@@ -12,7 +12,7 @@ export const PROJECTS: Project[] = [
     {
         name: "ttfx-js",
         description: "A lightweight JavaScript toolkit for terminal text effects.",
-        url: "https://github.com/Muhammad-Owais-Warsi/ttfx-js",
+        url: "https://muhammad-owais-warsi.github.io/ttfx-js/",
         stack: ["JavaScript"],
     },
     {

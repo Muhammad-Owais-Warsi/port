@@ -36,11 +36,9 @@ const socials = [
 ---
 
 <aside
-    class="hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar pl-10 pr-6 py-8 text-sidebar-foreground"
+    class="hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar py-8 text-sidebar-foreground"
 >
-    <div class="space-y-1"></div>
-
-    <nav class="mt-10 space-y-4 text-xs sm:text-sm font-medium">
+    <nav class="mt-10 space-y-4 pl-10 pr-6 text-xs sm:text-sm font-medium">
         {
             navItems.map((item) => (
                 <a
@@ -65,10 +63,9 @@ const socials = [
         </a>
     </nav>
 
-    <div class="mt-8 pt-6"></div>
-
-    <div class="mt-auto border-t border-sidebar-border pt-6 text-xs sm:text-sm">
-        <div class="flex items-center gap-5">
+    <div class="mt-auto text-xs sm:text-sm">
+        <div class="mx-10 border-t border-sidebar-border"></div>
+        <div class="flex items-center gap-5 pl-10 pr-6 pt-6">
             {
                 socials.map((social) => {
                     const Icon = social.icon;
@@ -86,7 +83,7 @@ const socials = [
                 })
             }
         </div>
-        <div class="mt-5 flex items-center gap-4">
+        <div class="mt-5 flex items-center gap-4 pl-10 pr-6">
             <button
                 type="button"
                 class="theme-toggle text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground"

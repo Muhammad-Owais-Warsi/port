@@ -13,8 +13,11 @@ type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content, headings } = await render(post);
+
+const words = (post.body ?? "").split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(words / 200));
 ---
 
-<BlogPost {...post.data} toc={post.data.toc} headings={headings}>
+<BlogPost {...post.data} toc={post.data.toc} headings={headings} readingTime={readingTime}>
 	<Content />
 </BlogPost>

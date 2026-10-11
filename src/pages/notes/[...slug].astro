@@ -13,8 +13,11 @@ type Props = CollectionEntry<'notes'>;
 
 const post = Astro.props;
 const { Content } = await render(post);
+
+const words = (post.body ?? "").split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(words / 200));
 ---
 
-<NotePost {...post.data}>
+<NotePost {...post.data} readingTime={readingTime}>
     <Content />
 </NotePost>

@@ -12,9 +12,10 @@ const katexStylesheet =
 
 type Props = CollectionEntry<"blog">["data"] & {
     headings: MarkdownHeading[];
+    readingTime: number;
 };
 
-const { title, pubDate, updatedDate, heroImage, headings, toc } = Astro.props;
+const { title, pubDate, updatedDate, heroImage, headings, toc, readingTime } = Astro.props;
 const ogImage = heroImage ? heroImage : "/og-blog.png";
 ---
 
@@ -51,6 +52,9 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
             <div class="mb-4 sm:mb-6 text-center">
                 <p class="text-xs text-muted-foreground">
                     <FormattedDate date={pubDate} />
+                </p>
+                <p class="mt-1 text-xs text-muted-foreground">
+                    {readingTime} min read
                 </p>
                 {
                     updatedDate && (
