@@ -1,0 +1,142 @@
+---
+title: "AG-UI"
+description: "Article on AG-UI"
+pubDate: "Oct 16 2026"
+heroImage: ./header.png
+toc:
+  - "Introduction"
+  - "AG-UI"
+  - "Building Client"
+  - "Conclusion"
+---
+
+## Introduction 
+**There are many products with bad documentation and [AG-UI](https://docs.ag-ui.com/) is one of them**. A bit harsh but anyways. 
+
+LLMs are probabilistic in nature and hence the output we get is nondeterministic. You don't know what output you're going to get next. 
+
+Therefore building applications on top of LLMs brings a new challenge i.e. how to keep things as deterministic as possible? What interface to show when? 
+
+In the upcoming sections we are going to talk about AG-UI and especially how to build clients with it, the issue I faced a lot when building agents. 
+
+
+## AG-UI
+AG-UI is an open, **lightweight**, **event-based protocol** that standardizes how AI agents connect to user-facing applications.
+
+It is not another UI library, it's a protocol to connect your client with agentic backends. AG-UI is one of three prominent open [agentic protocols](https://docs.ag-ui.com/agentic-protocols)
+
+Before moving any further, let's talk why AG-UI even exists?
+Agentic applications don't work on traditional request/response model, where everything is deterministic, you make a request, get the response and render the UI.
+
+In agent powered apps you don't know what's coming next 
+- your request might end up in long-running session
+- model started thinking
+- human in the loop scenarios
+- tool calls etc... 
+
+Everything is random and hence rendering the UI according to these events is a big challenge.
+
+AG-UI tackles these challenges by making the system event driven and typed. This helps you know what is currently happening with your agent and what should you do.
+
+AG-UI supports many production-used agent frameworks and clients. Check [here](https://docs.ag-ui.com/introduction#supported-integrations).
+
+I'm going to focus on building a client utilising AG-UI.
+
+## Building Client 
+
+In this we're going to build a conversational CLI agent from scratch using AG-UI and Langchain.
+
+> Verify the code once before running.
+
+1. Project setup
+```
+mkdir ag-ui-langchain
+cd ag-ui-langchain
+bun init -y
+bun add @ag-ui/client @ag-ui/core @ag-ui/langchain @langchain/core @langchain/openai
+```
+
+2. Create `src/agent.ts`
+```ts
+import { LangChainAgent } from "@ag-ui/langchain";
+import { ChatOpenAI } from "@langchain/openai";
+
+export const agent = new LangChainAgent({
+  chainFn: async ({ messages, tools, threadId }) => {
+    const model = new ChatOpenAI({
+      model: "gpt-4o-mini",
+      temperature: 0,
+    });
+
+    const modelWithTools = model.bindTools(tools);
+
+    return modelWithTools.stream(messages, {
+      metadata: { conversation_id: threadId },
+    });
+  },
+});
+```
+
+3. Create `src/index.ts`
+```ts
+import { randomUUID } from "@ag-ui/client";
+import * as readline from "node:readline";
+import { agent } from "./agent";
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+async function chat() {
+  console.log("AG-UI + LangChain");
+  console.log("Type a message. Press Ctrl+C to exit.\n");
+
+  while (true) {
+    const input = await new Promise<string>((resolve) => {
+      rl.question("You: ", resolve);
+    });
+
+    if (!input.trim()) continue;
+
+    agent.messages.push({
+      id: randomUUID(),
+      role: "user",
+      content: input.trim(),
+    });
+
+    await agent.runAgent(
+      {},
+      {
+        onTextMessageStartEvent() {
+          process.stdout.write("Assistant: ");
+        },
+        onTextMessageContentEvent({ event }) {
+          process.stdout.write(event.delta);
+        },
+        onTextMessageEndEvent() {
+          console.log("\n");
+        },
+      },
+    );
+  }
+}
+
+chat().catch(console.error);
+```
+
+4. Export API Key
+```
+export OPENAI_API_KEY="your-api-key-here"
+```
+
+5. Start the client
+```
+bun run src/index.ts
+```
+
+
+## Conclusion
+[AG-UI](https://docs.ag-ui.com/) is an open, **lightweight**, **event-based protocol** that standardizes how AI agents connect to user-facing applications. It helps in building user interfaces of agentic applications where everything is nondeterministic in nature. 
+
+It is not another UI library but a protocol or more simply a communication layer in between your client and agent backend.

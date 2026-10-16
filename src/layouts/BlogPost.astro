@@ -37,11 +37,9 @@ const ogImage = heroImage ? heroImage : "/og-blog.png";
             {
                 heroImage && (
                     <Image
-                        width={1020}
-                        height={510}
                         src={heroImage}
                         alt="blog-image"
-                        class="w-full rounded-xl sm:rounded-2xl object-cover"
+                        class="mx-auto h-auto max-h-[420px] w-auto max-w-full rounded-xl sm:rounded-2xl object-contain"
                     />
                 )
             }

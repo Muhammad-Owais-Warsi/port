@@ -27,11 +27,9 @@ const ogImage = heroImage ? heroImage : "/og.png";
         <div class="mx-auto w-full max-w-4xl">
             {heroImage && (
                 <Image
-                    width={1020}
-                    height={510}
                     src={heroImage}
                     alt="note-image"
-                    class="w-full rounded-xl sm:rounded-2xl object-cover"
+                    class="mx-auto h-auto max-h-[420px] w-auto max-w-full rounded-xl sm:rounded-2xl object-contain"
                 />
             )}
         </div>
