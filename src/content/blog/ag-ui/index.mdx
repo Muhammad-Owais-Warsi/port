@@ -15,7 +15,7 @@ toc:
 
 LLMs are probabilistic in nature and hence the output we get is nondeterministic. You don't know what output you're going to get next. 
 
-Therefore building applications on top of LLMs brings a new challenge i.e. how to keep things as deterministic as possible? What interface to show when? 
+Therefore building applications on top of LLMs brings a new challenge i.e. how to keep things as deterministic as possible? What interface to show and when? 
 
 In the upcoming sections we are going to talk about AG-UI and especially how to build clients with it, the issue I faced a lot when building agents. 
 
@@ -34,15 +34,23 @@ In agent powered apps you don't know what's coming next
 - human in the loop scenarios
 - tool calls etc... 
 
+For example
+```
+When using ChatGPT or Claude you might have noticed that sometimes 
+they render cards to show information, sometimes draw flowcharts, 
+for images render different UI, and they do it very cleanly.
+```
+
 Everything is random and hence rendering the UI according to these events is a big challenge.
 
-AG-UI tackles these challenges by making the system event driven and typed. This helps you know what is currently happening with your agent and what should you do.
+AG-UI tackles these challenges by making the system **typed and event driven** . This helps you know what is currently happening with your agent and what should you do.
 
 AG-UI supports many production-used agent frameworks and clients. Check [here](https://docs.ag-ui.com/introduction#supported-integrations).
 
-I'm going to focus on building a client utilising AG-UI.
 
 ## Building Client 
+
+So now let's see how we can integrate AG-UI in our user facing apps and using agent frameworks that AG-UI supports. 
 
 In this we're going to build a conversational CLI agent from scratch using AG-UI and Langchain.
 
@@ -135,9 +143,11 @@ export OPENAI_API_KEY="your-api-key-here"
 bun run src/index.ts
 ```
 
-You can view the complete and detailed code using [mastra](https://mastra.ai/) agent [here](https://docs.ag-ui.com/quickstart/clients) 
+You can view the complete and detailed code using [mastra](https://mastra.ai/) agent [here](https://docs.ag-ui.com/quickstart/clients). 
 
 ## Conclusion
 [AG-UI](https://docs.ag-ui.com/) is an open, **lightweight**, **event-based protocol** that standardizes how AI agents connect to user-facing applications. It helps in building user interfaces of agentic applications where everything is nondeterministic in nature. 
 
-It is not another UI library but a protocol or more simply a communication layer in between your client and agent backend.
+AG-UI is not limited to building [clients](https://docs.ag-ui.com/quickstart/clients), you can even make your own [integrations](https://docs.ag-ui.com/quickstart/introduction) via AG-UI [server](https://docs.ag-ui.com/quickstart/server) or [middleware](https://docs.ag-ui.com/quickstart/middleware).
+
+You can even handle complex scenarios like human-in-the-loop, subagents etc...
