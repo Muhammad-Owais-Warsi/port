@@ -1,0 +1,10 @@
+---
+// Highlights the wrapped text, matching the blog/notes highlight look.
+//   <Highlight>important text</Highlight>
+// For use in .astro files where Markdown's ==...== syntax isn't parsed.
+const { class: className = "" } = Astro.props;
+---
+
+<mark class:list={["rounded-sm bg-primary/15 px-0.5 text-inherit", className]}>
+    <slot />
+</mark>

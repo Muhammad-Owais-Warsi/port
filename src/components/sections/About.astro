@@ -14,32 +14,56 @@ const { heading = "About Me" } = Astro.props;
             {heading}
         </h2>
 
-        <div
-            class="space-y-4 sm:space-y-5 text-sm sm:text-base leading-relaxed text-foreground/80 text-pretty"
+        <ul
+            class="space-y-3 text-sm sm:text-base leading-relaxed text-foreground/80"
         >
-            <p>
-                I'm currently an undergrad pursuing my Bachelors degree. From
-                hating C.S. every second to spending hours debugging a bug.
-            </p>
-
-            <p>
-                Building products across full stack applications, SDKs and
-                developer tools. I also sometimes write
-                <a
-                    href="/blog"
-                    class="underline underline-offset-4 decoration-current text-primary"
-                >
-                    blogs
-                </a>
-                , exploring new technologies, and collaborating with others.
-            </p>
-
-            <p>
-                That's all, nothing too special. Probably building or writing
-                while you're reading this.
-            </p>
-
-            <p>Thanks for reading :)</p>
-        </div>
+            <li class="flex gap-3">
+                <span
+                    class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground"
+                ></span>
+                <span>
+                    An undergrad who used to hate computer science, but now
+                    spend hours running agents and debugging.
+                </span>
+            </li>
+            <li class="flex gap-3">
+                <span
+                    class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground"
+                ></span>
+                <span>
+                    Benchmarking frontier models and building evals
+                    <a
+                        href="https://ressl.ai/"
+                        class="underline underline-offset-4 decoration-current text-primary"
+                    >
+                        @ResslAI
+                    </a>
+                </span>
+            </li>
+            <li class="flex gap-3">
+                <span
+                    class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground"
+                ></span>
+                <span>
+                    Building products across full stack applications, SDKs and
+                    developer tools.
+                </span>
+            </li>
+            <li class="flex gap-3">
+                <span
+                    class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground"
+                ></span>
+                <span>
+                    Writing
+                    <a
+                        href="/blog"
+                        class="underline underline-offset-4 decoration-current text-primary"
+                    >
+                        blogs
+                    </a>
+                    on AI, systems and devtools.
+                </span>
+            </li>
+        </ul>
     </div>
 </section>
