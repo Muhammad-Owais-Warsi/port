@@ -3,7 +3,6 @@ import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import SiteLayout from "./SiteLayout.astro";
-import PrintButton from "../components/blog/PrintButton.astro";
 
 interface Props {
     title: string;
@@ -37,16 +36,16 @@ const ogImage = heroImage ? heroImage : "/og.png";
             class="mx-auto w-full max-w-2xl px-2 sm:px-4 pt-6 sm:pt-8 text-foreground/80"
         >
             <div class="mb-4 sm:mb-6 text-center">
-                <p class="text-xs text-muted-foreground print:hidden">
+                <p class="text-xs text-muted-foreground">
                     <FormattedDate date={pubDate} />
                 </p>
-                <p class="mt-1 text-xs text-muted-foreground print:hidden">
+                <p class="mt-1 text-xs text-muted-foreground">
                     {readingTime} min read
                 </p>
                 <h1 class="mt-3 sm:mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
                     {title}
                 </h1>
-                <div class="mt-4 flex items-center justify-center gap-4 print:hidden">
+                <div class="mt-4 flex items-center justify-center gap-4">
                     <button
                         id="share-btn"
                         class="inline-flex items-center gap-2 text-xs sm:text-sm text-muted-foreground hover:text-primary"
@@ -77,16 +76,11 @@ const ogImage = heroImage ? heroImage : "/og.png";
                         >
                         Share
                     </button>
-                    <span class="text-border">|</span>
-                    <PrintButton />
                 </div>
                 <hr class="mt-6 border-border" />
             </div>
             <div class="prose prose-neutral dark:prose-invert max-w-none">
                 <slot />
-            </div>
-            <div class="hidden print:block mt-8 pt-4 border-t border-neutral-300 text-center">
-                <p class="text-sm text-black">Muhammad Owais Warsi</p>
             </div>
         </div>
     </article>
