@@ -1,0 +1,256 @@
+---
+title: "GEPA"
+description: "Walkthrough of genetic pareto(gepa) paper."
+pubDate: "Oct 25 2026"
+heroImage: "./header.png"
+---
+import Box from "@/components/Box.astro";
+
+## Introduction
+The set of instructions we send to an [LLM](https://en.wikipedia.org/wiki/Large_language_model) to get some response is known as prompts. We already know that models are powered by [weights](https://www.ibm.com/think/topics/llm-parameters), which are adjusted during training to help the model learn patterns from data. The complete [training process](https://www.ibm.com/think/topics/llm-training), which can take hours to several days or even longer aims to produce a model that performs better at its intended tasks.
+
+But prompts also plays a really significant role on how the model responds. Give it a broken or meaningless phrase, and it might generate irrelevant answers or start hallucinating, boiling the user's blood. But give it clear instructions that explain the problem and the goal, and you'll likely get a much better response.
+
+There are ways, patterns, techniques that exist to optimise the prompts in order to get better results. In the coming sections we will walkthrough one of them i.e. [GEPA](https://github.com/gepa-ai/gepa) , directly from the research paper, and will see how it make use of natural language feedback to optimise the prompts. 
+
+## GEPA
+[Genetic Pareto (GEPA)](https://github.com/gepa-ai/gepa) is a prompt optimisation technique introduced in July 2025, that uses natural language feedback and mantaining the pareto front, while keeping the wights of the model constant.
+
+GEPA has 3 core principals. 
+
+1. Genetic prompt evolution - In biology, organisms evolve across generations. Their offsprings inherit traits from their parents. GEPA take the exact same idea to to evolve and optimise the prompts. It takes feedbacks on existing prompts by testing them and improve the next prompt based on that. 
+
+2. Natural Language feedback - The feedback is not is binary or some other in-human readable language, but a [natural language](https://en.wikipedia.org/wiki/Natural_language) based feedback system to improve the prompts.
+
+3. Pareto Based Candidate Selection - This is one of the core components of GEPA. **A prompt is Pareto optimal when there's no way to improve its score on one [golden](https://www.sprinklr.com/help/articles/set-up-nlu-based-intents/what-is-a-golden-test-set/64804933723d925979db84e4) without making it worse on another.** Therefore we never select a global best prompt for future imrovisations, but the best ones for that domain.
+
+
+## Understanding the paper
+
+Now let's understand how GEPA actually works using the terms and taxonomy used in [research paper](https://arxiv.org/abs/2507.19457)
+
+
+| Paper terminology | What it means |
+| --- | --- |
+| Compound AI system $\Phi$ | The complete support system, including its LLM and prompt |
+| Prompt parameters $\Pi_\theta$ | The textual instructions we want to optimize |
+| Frozen LLM weights $\theta_{\text{frozen}}$ | The underlying model stays unchanged |
+| Training dataset $D_{\text{train}}$ | A collection of customer questions and expected behavior |
+| Evaluation metric $\mu$ | A score measuring how well the system answers |
+| Feedback function $f_\mu$ | Feedback explaining what went wrong in an execution |
+| Rollout | Running the system on an example and observing its behavior |
+| Rollout budget $B$ | The limited number of executions available for optimization |
+| Candidate pool $P$ | The set of prompt variants discovered so far |
+| Mutation | Creating a new prompt based on an existing prompt and feedback |
+| Crossover | Combining useful elements from multiple candidate prompts |
+| Pareto-based selection | Preserving candidates that offer different performance trade-offs |
+
+
+Given an AI system $\Phi$, the goal is to identify parameters $\Pi_\theta$ that maximize
+task performance. GEPA begins with a candidate pool $P$ containing only the base system, where each candidate is a concrete instantiation of $\langle \Pi, \theta_{\text{frozen}} \rangle_\Phi$. It then enters an optimization loop, repeatedly proposing
+new candidates until the evaluation budget $B$ is exhausted. Candidates are derived from existing ones via reflective mutation or crossover, guided by feedback from rollouts, with each inheriting learning signals from
+its parents and its own rollout so that GEPA accumulates knowledge along the genetic tree.
+
+
+![Diagram](./first.png)
+
+This diagram represents the complete working of GEPA. In the next sections we will walk through this part by part.
+
+### Intialize
+This is the starting point of the optimisation, a while loop is has initiated and will loop until the `budget > 0`.
+
+```cpp
+
+candidate_pool = [p0, p1, p2, p3, p4] // we have few initial prompts.
+    
+while(budget > 0) {
+    // internal processess.
+}
+```
+
+Now we run these prompts from `candidate_pool` on `n` tasks to see how well they perform.
+
+```cpp
+// Each row represents a task.
+// Each column represents a candidate prompt.
+// 1 = pass, 0 = fail
+
+scores = [
+    [1, 0, 0, 0, 0], // Task 1
+    [0, 1, 0, 0, 1], // Task 2
+    [0, 0, 0, 0, 1]  // Task 3
+];
+
+```
+
+
+### Pareto-based Candidate Filtering.
+
+Now we have scores of how each prompt has performed on respective tasks, we can filter out the best-performing candidates per task. 
+
+<Box variant="info" title="note">
+Selecting the best-performing candidate is not the same as pareto filtering. 
+</Box>
+
+1. **Chosing the best-perfrorming candidates**
+
+```cpp
+scores = [
+    [1, 0, 0, 0, 0], // Task 1
+    [0, 1, 0, 0, 1], // Task 2
+    [0, 0, 0, 0, 1]  // Task 3
+];
+
+best_candidates = [
+    [p0],      // Task 1
+    [p1, p4],  // Task 2
+    [p4]       // Task 3
+];
+```
+
+Once we have selected the best candidates, we will find the "pareto frontier" by filtering it from `best_candidates`.
+
+2. **How best candidate selection different from pareto filtering ?**
+
+Selecting the best candidate per task looks at each task independently. **Pareto filtering uses the candidates performance across tasks to determine which candidates should remain in the pool.**
+
+```
+For example: 
+- p0 passes task_1, but fails on task_2 and task_3
+- p1 passes task_2, but fails on task_1 and task_3
+- p2 fails on every task.
+
+// best_candidate selection
+best_candidates = [
+    [p0], // Task 1
+    [p1], // Task 2
+    []    // Task 3: no candidate passes
+];
+
+This tells us which candidate performs best on each task, 
+but never tells which candidates should remain in the pool.
+
+// pareto filtering
+now we compare candidates across all tasks.
+
+p0 and p1 both outperform p2 on at least one task 
+and perform equally on the others. 
+Therefore, p2 is dominated by both candidates and can be discarded.
+
+However, p0 and p1 do not dominate each other. 
+Each passes a different task, so both remain in the
+
+
+// pareto_frontier
+pareto_frontier = [p0, p1];
+```
+
+3. **Finding pareto frontier**
+
+Now using the above findings we filter out the candidates to keep in the pool and they become our `pareto frontier` and are used to make optimisations and improvements in future prompts. 
+
+```cpp
+pareto_frontier = [p0, p1, p4];
+```
+
+### Proposing new candidates
+Once we are done with pareto filtering we can now move onto process of proposing the new candidates (prompts).
+
+GEPA has two strategies for new candidates proposal. 
+
+1. **Reflective Prompt Mutation**
+
+Instead of making random changes to a prompt, this method uses execution traces, outputs, and feedback from previous rollouts to understand what went wrong.
+
+Based on this feedback, the model proposes targeted changes to the prompt instead of making random modifications.
+
+Given a `candidate` to mutate from `pareto_frontier`, GEPA executes the candidate on a sampled `minibatch (M)` of input queries from **training dataset $D_{\text{train}}$**
+
+From the execution traces GEPA extracts the module’s inputs, outputs, and reasoning, and calls the **feedback function $f_\mu$** , 
+which returns a numeric score and text feedback including the details about the evaluation (like compiler error messages, failed
+rubrics, etc.)
+
+GEPA now **selects the module (among |M| modules that the language program contains) to be updated based on a policy (round-robin)**, and a [reflection LM]() is then shown the (current prompt, language program trajectory, score, feedback) with the task to reflect the mutation in the prompt.
+
+<Box variant="info" title="What is langauge program and module ?">
+    Imagine a customer support bot agent
+    - Language program: The entire chatbot system that answers customer questions.
+    - Module: One part of the system, such as retrieving a refund policy.
+</Box>
+
+
+```cpp
+// p = selected candidate
+// m = minibatch from tarining dataset
+// e = execution traces.
+
+(score, text_feedback, meta) = f_mu(
+    e.input,
+    e.output,
+    e.reasoning
+);
+
+// Select the module to update
+module = select_module(language_program, policy);
+
+// Ask the reflection LM to propose an improved prompt
+p_new = reflection_LM(
+    module.prompt,
+    e,
+    score,
+    text_feedback
+);
+
+```
+
+2. **System Aware Merge**
+
+This method takes a different approach. it combines useful instructions from multiple candidate prompts to propose a new candidate.
+
+Suppose we have two prompts:
+- p1 is good at retrieving the correct refund policy.
+- p2 is good at explaining the policy clearly to customers.
+
+A system-aware merge can use the prompts and execution feedback to propose a new prompt that incorporates both strengths.
+
+```cpp
+// selected candidate = [p2, p3]
+
+// it will merge useful instrcution from both
+p_new = merge(p2, p3)
+```
+
+
+### Build decison
+Now we have `P_new` that either got to us using **Reflective Prompt Mutation** or **System Aware Merge**.
+
+We evaluate this new prompt on minibacth and check whether the performance has been improved or not?
+
+If the performance has improved, we evaluate `P_new` on all the tasks again and add it to the `candidate_pool` and run the complete process again until `budget > 0`.
+
+If performance has not improved, we discard `p_new` we re-run the process again until `budget > 0`.
+
+```cpp
+candidate_pool = [p0, p1, p2, p3, p4]
+    
+while (budget > 0) {
+    // all processess stated in above sections
+    (p_new, parent_score) = get_p_new(candidate_pool); 
+
+    score = minbatch_eval(p_new);
+
+    if(score > parent_score) {
+        complete_eval(p_new) // evaluate on all tasks
+        candidate_pool.push(p_new); // add in the pool        
+    } 
+    budget-- 
+}
+```
+
+
+## Conclusion
+GEPA is natural language pareto based prompt optimization technique. It keeps the model weight constant and improve the prompt by natural lnaguage feedback and mantaining the pareto frontier.
+
+You may try GEPA on [deepeval](https://deepeval.com/docs/prompt-optimization-gepa) or checkout official [github](https://github.com/gepa-ai/gepa) repository. 
+
+Paper - https://arxiv.org/abs/2507.19457

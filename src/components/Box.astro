@@ -1,0 +1,59 @@
+---
+// Callout box for MDX posts/notes.
+//   import Box from "@/components/Box.astro";
+//
+//   <Box variant="tip" title="Tip">Markdown **works** here.</Box>
+interface Props {
+    variant?: "note" | "tip" | "info" | "warning" | "danger";
+    title?: string;
+    class?: string;
+}
+
+const { variant = "note", title, class: className = "" } = Astro.props;
+
+const boxes: Record<string, string> = {
+    note: "border-border bg-muted/50",
+    tip: "border-emerald-500 bg-emerald-500/5",
+    info: "border-primary bg-primary/5",
+    warning: "border-amber-500 bg-amber-500/5",
+    danger: "border-destructive bg-destructive/5",
+};
+
+const labels: Record<string, string> = {
+    note: "Note",
+    tip: "Tip",
+    info: "Info",
+    warning: "Warning",
+    danger: "Danger",
+};
+
+const accents: Record<string, string> = {
+    note: "text-muted-foreground",
+    tip: "text-emerald-600 dark:text-emerald-400",
+    info: "text-primary",
+    warning: "text-amber-600 dark:text-amber-400",
+    danger: "text-destructive",
+};
+---
+
+<div
+    class:list={[
+        "not-prose my-6 rounded-r-lg border-l-4 py-3 pl-4 pr-4 text-sm sm:text-base print:border-l-2 print:border-black print:bg-transparent",
+        boxes[variant],
+        className,
+    ]}
+>
+    <p
+        class:list={[
+            "mb-1 text-xs font-semibold uppercase tracking-wider",
+            accents[variant],
+        ]}
+    >
+        {title ?? labels[variant]}
+    </p>
+    <div
+        class="text-foreground/80 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4"
+    >
+        <slot />
+    </div>
+</div>
