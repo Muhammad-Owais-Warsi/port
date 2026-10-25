@@ -38,20 +38,64 @@ GEPA has 3 core principles.
 
 Now let's understand how GEPA actually works using the terms and taxonomy used in [research paper](https://arxiv.org/abs/2507.19457).
 
-| Paper terminology | What it means |
-| --- | --- |
-| Compound AI system $\Phi$ | The complete support system, including its LLM and prompt |
-| Prompt parameters $\Pi_\theta$ | The textual instructions we want to optimize |
-| Frozen LLM weights $\theta_{\text{frozen}}$ | The underlying model stays unchanged |
-| Training dataset $D_{\text{train}}$ | A collection of customer questions and expected behavior |
-| Evaluation metric $\mu$ | A score measuring how well the system answers |
-| Feedback function $f_\mu$ | Feedback explaining what went wrong in an execution |
-| Rollout | Running the system on an example and observing its behavior |
-| Rollout budget $B$ | The limited number of executions available for optimization |
-| Candidate pool $P$ | The set of prompt variants discovered so far |
-| Mutation | Creating a new prompt based on an existing prompt and feedback |
-| Crossover | Combining useful elements from multiple candidate prompts |
-| Pareto-based selection | Preserving candidates that offer different performance trade-offs |
+<table>
+  <thead>
+    <tr>
+      <th>Paper terminology</th>
+      <th>What it means</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Compound AI system $\Phi$</td>
+      <td>The complete support system, including its LLM and prompt</td>
+    </tr>
+    <tr>
+      <td>Prompt parameters $\Pi_\theta$</td>
+      <td>The textual instructions we want to optimize</td>
+    </tr>
+    <tr>
+      <td>Frozen LLM weights $\theta_{\text{frozen}}$</td>
+      <td>The underlying model stays unchanged</td>
+    </tr>
+    <tr>
+      <td>Training dataset $D_{\text{train}}$</td>
+      <td>A collection of customer questions and expected behavior</td>
+    </tr>
+    <tr>
+      <td>Evaluation metric $\mu$</td>
+      <td>A score measuring how well the system answers</td>
+    </tr>
+    <tr>
+      <td>Feedback function $f_\mu$</td>
+      <td>Feedback explaining what went wrong in an execution</td>
+    </tr>
+    <tr>
+      <td>Rollout</td>
+      <td>Running the system on an example and observing its behavior</td>
+    </tr>
+    <tr>
+      <td>Rollout budget $B$</td>
+      <td>The limited number of executions available for optimization</td>
+    </tr>
+    <tr>
+      <td>Candidate pool $P$</td>
+      <td>The set of prompt variants discovered so far</td>
+    </tr>
+    <tr>
+      <td>Mutation</td>
+      <td>Creating a new prompt based on an existing prompt and feedback</td>
+    </tr>
+    <tr>
+      <td>Crossover</td>
+      <td>Combining useful elements from multiple candidate prompts</td>
+    </tr>
+    <tr>
+      <td>Pareto-based selection</td>
+      <td>Preserving candidates that offer different performance trade-offs</td>
+    </tr>
+  </tbody>
+</table>
 
 Given an AI system $\Phi$, the goal is to identify parameters $\Pi_\theta$ that maximize
 task performance. GEPA begins with a candidate pool $P$ containing only the base system, where each candidate is a concrete instantiation of $\langle \Pi, \theta_{\text{frozen}} \rangle_\Phi$. It then enters an optimization loop, repeatedly proposing
