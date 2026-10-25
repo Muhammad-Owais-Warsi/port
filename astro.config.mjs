@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
@@ -15,7 +16,7 @@ import llms from "./src/integrations/llms";
 export default defineConfig({
     site: "https://owais.is-a.dev",
     base: "/",
-    integrations: [mdx({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeSlug, rehypeKatex, rehypeMark] }), sitemap(), react(), llms()],
+    integrations: [mdx({ gfm: false, remarkPlugins: [remarkGfm, remarkMath], rehypePlugins: [rehypeSlug, rehypeKatex, rehypeMark] }), sitemap(), react(), llms()],
     build: {
         assets: "assets",
     },
