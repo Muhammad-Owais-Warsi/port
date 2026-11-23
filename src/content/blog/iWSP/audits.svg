@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 545" width="700" height="545">
+<defs>
+  <marker id="a-b" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+    <path d="M1,1.5 L9,6 L1,10.5" fill="none" stroke="#1f6fa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </marker>
+  <filter id="a-sh" x="-10%" y="-10%" width="120%" height="125%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.18" />
+  </filter>
+</defs>
+
+<text x="190" y="20" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="currentColor" text-anchor="middle" dominant-baseline="central">Audit by an LLM judge</text>
+<rect x="20" y="44" width="340" height="200" rx="12" fill="#f3f4f5" stroke="#d3d7db" stroke-width="1.5" filter="url(#a-sh)" />
+<rect x="44" y="66" width="64" height="58" rx="5" fill="#fff" stroke="#9aa3ab" stroke-width="1.5" />
+<path d="M44,78 V71 Q44,66 49,66 H103 Q108,66 108,71 V78 Z" fill="#cfd5da" />
+<rect x="52" y="92" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="62" y="92" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="72" y="92" width="8" height="8" rx="1" fill="#1f6fa8" /><rect x="82" y="92" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="92" y="92" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="52" y="102" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="62" y="102" width="8" height="8" rx="1" fill="#c93b6b" /><rect x="72" y="102" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="82" y="102" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="92" y="102" width="8" height="8" rx="1" fill="#1f6fa8" /><rect x="52" y="112" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="62" y="112" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="72" y="112" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="82" y="112" width="8" height="8" rx="1" fill="#c93b6b" /><rect x="92" y="112" width="8" height="8" rx="1" fill="#cdd2d7" />
+<line x1="170" y1="95" x2="120" y2="95" stroke="#1f6fa8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#a-b)" />
+<rect x="178" y="78" width="148" height="34" rx="9" fill="#fff" stroke="#d3d7db" stroke-width="1.5" />
+<text x="252" y="95.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">LLM judge</text>
+<circle cx="52" cy="156" r="8" fill="#1f6fa8" /><path d="M48,156.3 L50.8,159.2 L56,153" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><text x="72" y="156.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">no training</text>
+<circle cx="52" cy="188" r="8" fill="#1f6fa8" /><path d="M48,188.3 L50.8,191.2 L56,185" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><text x="72" y="188.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">follows the rules</text>
+<circle cx="52" cy="220" r="8" fill="#1f6fa8" /><path d="M48,220.3 L50.8,223.2 L56,217" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><text x="72" y="220.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">interpretable edits</text>
+
+<text x="545" y="20" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="currentColor" text-anchor="middle" dominant-baseline="central">Hidden accuracy</text>
+<g stroke="currentColor" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round" fill="none">
+  <path d="M470,54 V202 H628" />
+  <path d="M464,62 H470" /><path d="M464,202 H470" />
+  <path d="M470,202 V208" /><path d="M620,202 V208" />
+</g>
+<line x1="470" y1="202" x2="620" y2="62" stroke="currentColor" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="6 5" />
+<circle cx="485" cy="193.6" r="4.5" fill="#c93b6b" /><circle cx="530" cy="151.6" r="4.5" fill="#c93b6b" /><circle cx="560" cy="123.6" r="4.5" fill="#c93b6b" /><circle cx="584" cy="101.2" r="4.5" fill="#c93b6b" /><circle cx="588.5" cy="95.6" r="4.5" fill="#c93b6b" />
+<circle cx="620" cy="62" r="5.5" fill="#1f6fa8" />
+<g font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" fill="currentColor" fill-opacity="0.8" font-size="14.5" dominant-baseline="central">
+  <text x="458" y="62" text-anchor="end">100</text>
+  <text x="458" y="202" text-anchor="end">50</text>
+
+  <text x="470" y="222" text-anchor="middle">50</text>
+  <text x="620" y="222" text-anchor="middle">100</text>
+  <text x="545" y="244" text-anchor="middle" font-size="15.5">Original (%)</text>
+  <text transform="translate(414,132) rotate(-90)" text-anchor="middle" font-size="15.5">Rebuilt (%)</text>
+</g>
+<text x="608" y="46" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" font-weight="400" fill="#1f6fa8" text-anchor="end" dominant-baseline="central">Algorithmic</text>
+<text x="590" y="164" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" font-weight="400" fill="#c93b6b" font-style="italic" text-anchor="start" dominant-baseline="central">NLP</text>
+<g transform="translate(0,290)">
+<text x="350" y="14" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="currentColor" text-anchor="middle" dominant-baseline="central">Interpretability bottleneck test: rebuild the model from its description</text>
+
+<rect x="15" y="44" width="150" height="196" rx="10" fill="#f3f4f5" stroke="#d3d7db" stroke-width="1.5" filter="url(#a-sh)" /><path d="M15,78 V54 Q15,44 25,44 H155 Q165,44 165,54 V78 Z" fill="#cfd5da" /><text x="90" y="62" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Example model</text>
+<text x="90" y="136" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="400" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Addition</text>
+<text x="90" y="160" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="400" fill="#1f2933" text-anchor="middle" dominant-baseline="central">27 parameters</text>
+
+<line x1="170" y1="142" x2="242" y2="142" stroke="#1f6fa8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#a-b)" />
+<text x="206" y="122" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#1f6fa8" text-anchor="middle" dominant-baseline="central">Describe</text>
+<text x="206" y="164" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="currentColor" fill-opacity="0.7" text-anchor="middle" dominant-baseline="central">≤200</text>
+<text x="206" y="182" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="currentColor" fill-opacity="0.7" text-anchor="middle" dominant-baseline="central">words</text>
+
+<rect x="247" y="44" width="172" height="196" rx="10" fill="#dbeaf6" stroke="#8db6d6" stroke-width="1.5" filter="url(#a-sh)" /><path d="M247,78 V54 Q247,44 257,44 H409 Q419,44 419,54 V78 Z" fill="#bcd6ea" /><text x="333" y="62" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Description</text>
+<text x="333" y="108" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#55626e" font-style="italic" text-anchor="middle" dominant-baseline="central">“This model adds</text>
+<text x="333" y="130" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#55626e" font-style="italic" text-anchor="middle" dominant-baseline="central">in one cross-attention</text>
+<text x="333" y="152" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#55626e" font-style="italic" text-anchor="middle" dominant-baseline="central">read, treating the sum</text>
+<text x="333" y="174" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#55626e" font-style="italic" text-anchor="middle" dominant-baseline="central">as an angle on a</text>
+<text x="333" y="196" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#55626e" font-style="italic" text-anchor="middle" dominant-baseline="central">ten-sector ring…”</text>
+
+<line x1="424" y1="142" x2="496" y2="142" stroke="#1f6fa8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#a-b)" />
+<text x="460" y="104" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#1f6fa8" text-anchor="middle" dominant-baseline="central">Fresh</text>
+<text x="460" y="122" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#1f6fa8" text-anchor="middle" dominant-baseline="central">agent</text>
+
+<rect x="501" y="44" width="184" height="196" rx="10" fill="#f3f4f5" stroke="#d3d7db" stroke-width="1.5" filter="url(#a-sh)" /><path d="M501,78 V54 Q501,44 511,44 H675 Q685,44 685,54 V78 Z" fill="#cfd5da" /><text x="593" y="62" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Rebuilt model</text>
+<text x="519" y="112" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">Almost the same:</text>
+<circle cx="527" cy="144" r="8" fill="#1f6fa8" /><path d="M523,144.3 L525.8,147.2 L531,141" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><text x="545" y="144.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">performance</text>
+<circle cx="527" cy="174" r="8" fill="#1f6fa8" /><path d="M523,174.3 L525.8,177.2 L531,171" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><text x="545" y="174.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">predictions</text>
+<circle cx="527" cy="204" r="8" fill="#1f6fa8" /><path d="M523,204.3 L525.8,207.2 L531,201" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><text x="545" y="204.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="400" fill="#1f2933" text-anchor="start" dominant-baseline="central">parameter counts</text>
+</g>
+</svg>

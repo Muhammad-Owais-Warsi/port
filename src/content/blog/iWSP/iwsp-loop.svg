@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="66 22 850 246" width="850" height="246">
+<defs>
+  <marker id="ah-g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+    <path d="M1,1 L7,4 L1,7" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  </marker>
+  <marker id="ah-b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+    <path d="M1,1 L8,5 L1,9" fill="none" stroke="#1f6fa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </marker>
+  <filter id="sh" x="-10%" y="-10%" width="120%" height="125%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2
+" flood-color="#000" flood-opacity="0.18" />
+  </filter>
+</defs>
+
+<!-- Task prompt: Task top -> LLM agent -->
+<path d="M161,102 V70 Q161,56 175,56 H340" fill="none" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" marker-end="url(#ah-g)" />
+<text x="252" y="43" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="currentColor" fill-opacity="0.7" text-anchor="middle" dominant-baseline="central">Task prompt</text>
+
+<!-- LLM agent -->
+<rect x="348" y="36" width="132" height="36" rx="18" fill="#dfe3e6" />
+<text x="414" y="54" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#454e57" text-anchor="middle" dominant-baseline="central">LLM agent</text>
+
+<!-- Feedback: Metric top -> LLM agent -->
+<path d="M833,102 V70 Q833,56 819,56 H488" fill="none" stroke="#1f6fa8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-b)" />
+<text x="536" y="43" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" font-weight="700" fill="#1f6fa8" dominant-baseline="central">Performance guides the next revision</text>
+
+<!-- No training badge + writes label + arrow -->
+<rect x="268" y="77" width="136" height="24" rx="12" fill="#c93b6b" />
+<text x="336" y="89.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">No training allowed</text>
+<text x="422" y="89.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="700" fill="#1f6fa8" dominant-baseline="central">Writes every weight</text>
+<line x1="414" y1="86" x2="414" y2="103" stroke="#1f6fa8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-b)" />
+
+<!-- Task card -->
+<rect x="82" y="102" width="158" height="153" rx="9" fill="#f3f4f5" stroke="#d9dcdf" stroke-width="1.5" filter="url(#sh)" />
+<text x="161" y="165" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Task</text>
+<text x="161" y="191" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#6b7580" text-anchor="middle" dominant-baseline="central">Input <tspan font-style="italic">x</tspan>, target <tspan font-style="italic">y</tspan></text>
+
+<line x1="244" y1="182" x2="254" y2="182" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" marker-end="url(#ah-g)" />
+
+<!-- Model card -->
+<rect x="253" y="104" width="322" height="151" rx="7" fill="#f1f3f4" stroke="#9aa3ab" stroke-width="1.5" filter="url(#sh)" />
+<path d="M253,128 V111 Q253,104 260,104 H568 Q575,104 575,111 V128 Z" fill="#cfd5da" />
+<text x="414" y="116.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Model: weights written as code</text>
+
+<g font-family="'Fira Code', Consolas, 'Courier New', monospace" font-size="13" fill="#1f2933" dominant-baseline="central">
+  <text x="271" y="143">def write_weights(model):</text>
+  <text x="283" y="161" fill="#c93b6b" text-decoration="line-through">optimizer.step()</text>
+  <text x="283" y="179">model.layer1[0, 3] = <tspan fill="#1f6fa8">1.0</tspan></text>
+  <text x="283" y="197">model.layer1[1, 0] = <tspan fill="#c93b6b">-4.0</tspan></text>
+  <text x="283" y="215">model.layer2[0, 1] = <tspan fill="#1f6fa8">2.5</tspan></text>
+  <text x="283" y="233">model.layer2[2, 4] = <tspan fill="#c93b6b">-1.5</tspan></text>
+</g>
+<text x="510" y="146" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12.5" fill="#6b7580" dominant-baseline="central">Layer 1</text><rect x="506" y="156" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="156" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="156" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="156" width="8" height="8" rx="1" fill="#1f6fa8" /><rect x="546" y="156" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="506" y="166" width="8" height="8" rx="1" fill="#c93b6b" /><rect x="516" y="166" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="166" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="166" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="166" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="506" y="176" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="176" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="176" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="176" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="176" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="506" y="186" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="186" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="186" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="186" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="186" width="8" height="8" rx="1" fill="#cdd2d7" />
+<text x="510" y="203" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12.5" fill="#6b7580" dominant-baseline="central">Layer 2</text><rect x="506" y="213" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="213" width="8" height="8" rx="1" fill="#1f6fa8" /><rect x="526" y="213" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="213" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="213" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="506" y="223" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="223" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="223" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="223" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="223" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="506" y="233" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="233" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="233" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="233" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="233" width="8" height="8" rx="1" fill="#c93b6b" /><rect x="506" y="243" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="516" y="243" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="526" y="243" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="536" y="243" width="8" height="8" rx="1" fill="#cdd2d7" /><rect x="546" y="243" width="8" height="8" rx="1" fill="#cdd2d7" />
+
+<line x1="580" y1="182" x2="598" y2="182" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" marker-end="url(#ah-g)" />
+
+<!-- Fixed evaluator -->
+<rect x="600" y="102" width="144" height="153" rx="9" fill="#f3f4f5" stroke="#d9dcdf" stroke-width="1.5" filter="url(#sh)" />
+<text x="672" y="160" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16.5" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Fixed evaluator</text>
+<text x="672" y="185" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#6b7580" text-anchor="middle" dominant-baseline="central">Compares the</text>
+<text x="672" y="203" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#6b7580" text-anchor="middle" dominant-baseline="central">output with <tspan font-style="italic">y</tspan></text>
+
+<line x1="750" y1="182" x2="768" y2="182" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round" marker-end="url(#ah-g)" />
+
+<!-- Performance metric -->
+<rect x="772" y="102" width="122" height="153" rx="9" fill="#f3f4f5" stroke="#d9dcdf" stroke-width="1.5" filter="url(#sh)" />
+<text x="833" y="127" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16.5" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">Performance</text>
+<text x="833" y="146" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16.5" font-weight="700" fill="#1f2933" text-anchor="middle" dominant-baseline="central">metric</text>
+<path d="M802,208 H822 V192 H843 V176 H864 V162" fill="none" stroke="#1f6fa8" stroke-width="3" stroke-linejoin="miter" />
+<circle cx="865" cy="160" r="4.5" fill="#1f6fa8" />
+<line x1="800" y1="221" x2="868" y2="221" stroke="#d9dcdf" stroke-width="1.5" />
+</svg>

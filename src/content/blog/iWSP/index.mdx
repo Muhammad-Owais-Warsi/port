@@ -1,0 +1,174 @@
+---
+title: "iWSP"
+description: "Interpretable weight-space programming."
+pubDate: "Nov 11 2026"
+heroImage: "./header.jpg"
+---
+
+import Box from "@/components/Box.astro";
+
+## Introduction
+LLMs are trained on huge datasets to predict the next token. During training, one of the most crucial processes is updating the model's weights. These weights influence the predictions of a model.
+
+But we don't update the weights manually. [Backpropagation](https://en.wikipedia.org/wiki/Backpropagation) is used to adjust the weights of the model based on the prediction error.
+
+The model makes a prediction, compares it with the expected output, and calculates the loss. Backpropagation then works backwards through the network, using the [chain rule](https://en.wikipedia.org/wiki/Chain_rule) to calculate the gradients of each weight with respect to the loss.
+[Gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) uses these gradients to update the weights in a direction that reduces the loss.
+
+On Nov 2 2026, [Rikiya Takehi](https://x.com/rikiyatakehi) made a [post on X](https://x.com/rikiyatakehi/status/2117313742891327994?a=MpwFEmpAtPypNLvTPnw&s=20) in which he writes "*We asked GPT-6 Astra to edit Qwen3.5-0.8B weights to improve math.
+It directly changed only 0.016% of weights, fixing 0.8B's reasoning loops & improving math up to 6x and even instruction following 3x, without gradients or training*" and calls it a "**weight-space programming.**"
+
+On Nov 12 2026, the research team from Microsoft introduced **"Interpretable weight-space programming (iWSP)"**, where they tried to make the above process "interpretable".
+
+
+
+
+## What is weight-space programming?
+It is a technique to read/write neural network weights directly using frontier LLMs without the need of training loops and gradient descent.
+
+In their initial experiments using **GPT-6 Astra**, the researchers demonstrated three distinct capabilities.
+
+1. **LLMs can read neural network weights:** Just by looking at the raw weights of the model, the LLM figured out what the model was trained to do and located its key internal parts.
+2. **LLMs can fix neural network weights:** The LLM was able to fix the broken pieces of the network, and manually edited a tiny fraction of its weights. In one test, changing just `0.016%` of **Qwen3.5-0.8B’s** weights stopped it from getting stuck in loops and raised its math score from `7.9% to 48.1%`.
+3. **LLMs can write neural network weights from scratch:** Given the rules and layout, LLMs wrote working weights from scratch without needing any training.
+
+**This was a crazy discovery on its own!!!**
+Here is the complete [blog](https://rikiyat.github.io/blog/weight-space-programming/).
+
+But the problem that still exists is no [interpretability](https://en.wikipedia.org/wiki/Explainable_artificial_intelligence#Interpretability).
+
+This means, LLMs are able to read/write the weights manually, but there is no proper explanation of **"why was this change made and how does it affect the model's behaviour?"**.
+
+## Interpretable weight-space programming
+[iWSP](https://github.com/csinva/weight-space-programming-autoresearch) is a technique inspired by the work of "weight-space programming" where we further require that weight-space edits be "interpretable" and then iteratively update weights to optimize a performance objective.
+
+In the modern era, as massive networks trained with backpropagation have improved their performance, models have sacrificed this interpretability. This raises concerns around regulatory compliance, safety, and alignment.
+It is particularly limiting in fields such as neuroscience and social science, where trustworthy interpretation is often itself the end goal.
+
+iWSP guides a frontier agent to directly write a model while disallowing any training. Then, a fixed evaluator measures its performance, and the agent revises it iteratively.
+
+## Initialisation
+
+<Excalidraw src="iwsp-loop.svg"  />
+
+
+A frontier coding agent is given a prompt that describes a task and a harness that includes a starting file and "non-editable" evaluation script. The prompt and harness forbid training, including optimizers, fitting loops, and
+downloading pretrained weights. It is free to use any interpretable functions/algorithms (e.g., [Gabor Filters](https://en.wikipedia.org/wiki/Gabor_filter)) but must implement them using only its given basic packages, such as [pytorch](https://en.wikipedia.org/wiki/PyTorch).
+
+It then repeatedly writes a model, evaluates it on a “visible set” of examples and revises it for a fixed number of iterations. Throughout, the agent is prompted to search for a human-understandable solution.
+
+```js
+let agent = new FrontierLLM(task, starting_file, evaluation_script);
+
+let model = starting_file;
+
+for (let iteration = 0; iteration < max_iterations; iteration++) {
+
+    // Write or modify model weights
+    model = agent.write_weights(model);
+
+    // Evaluate on visible examples
+    let results = evaluate(model, visible_examples);
+}
+
+return model;
+```
+
+## Interpretable Audits
+
+Once the agent reaches the max number of iterations, we start auditing the final model and how it is built.
+
+<Excalidraw src="audits.svg" />
+
+### 1st audit
+
+Each saved model along with the agent's logs is audited by a **separate agent (judge)** to test for the interpretability of the edits and any violations of the constraints outlined in the prompt and harness.
+
+
+
+### 2nd audit
+As an additional check, we alter the task data and re-run the weight-writing code. The weights remained unchanged, suggesting that the code did not explicitly depend on the task data only.
+
+### 3rd audit
+
+After the run concludes, the models are re-evaluated on a “hidden set” that they never saw during the iterative loop.
+
+### 4th audit
+Further, we test the interpretability of the final model by checking
+whether the models can be accurately described with a short text description using a frontier LLM (Opus 5.5).
+
+We ask the LLM to describe the best model for each task in at most 200 words, and give only that description to a fresh session of the agent, which rebuilds the model.
+
+
+Finally, we evaluate the rebuilt model and check whether it maintains similar predictive performance.
+
+
+## Algorithmic/NLP tasks
+In the algorithmic/NLP tasks, each run starts from one Python file and one instruction document. The file defines a small GPT-style [transformer](https://en.wikipedia.org/wiki/Transformer_(deep_learning)), with three layers of width 64 by default, a function `write_weights(model,task)` for the agent to fill in, and fixed code that evaluates the result. 
+
+The prompt names the task and tells the agent to follow the document until it has run 30 to 50 iterations,
+depending on the task.
+
+
+The document states the rules, including:
+```
+The model is NEVER trained. The agent must write the weights directly into interpretable_transformer.py.
+[. . . ] What you CANNOT do: Run any kind of training, gradient descent, optimizer step, fitting loop, or backprop.
+The model parameters must be set in closed form. [. . . ] The goal is simple: maximize accuracy [. . . ] All else
+being equal, more interpretable is better. A small improvement that adds ugly complexity is not worth it. Number
+of model parameters can help serve as a proxy for interpretability, but the real criterion is human-understandable
+structure in the weights
+```
+
+Each run has its own folder, and the agent works in a restricted [Claude Code](https://en.wikipedia.org/wiki/Claude_Code) session with six file and shell
+tools, **"no web access"** and file reads confined to that folder. Its only shell command, apart from read-only
+listings, runs this file.
+
+The agent learns and improves the model by evaluating on a visible set of 200 examples. The answer must exactly match the expected result.
+
+### Results 
+
+- Models perfectly solve algorithmic tasks and 3 out of 4 NLP tasks.
+- iWSP compresses models after making them accurate.
+- Bigger LLMs mostly achieve similar performance but are better at compressing models.
+- A 200-word description is sufficient to rebuild a model.
+- iWSP models translate known algorithms into transformers.
+- iWSP translates existing algorithms, such as multiplication and GCD, into transformer computations rather than inventing new algorithms.
+- Without known algorithms to follow, iWSP builds simple, interpretable rules to approximate tasks like sentiment classification.
+
+
+## Brain encoding models
+
+<Box variant="info" title="THIS SECTION IN SIMPLE TERMS">
+The goal is to build a model that predicts how the brain responds to an image or a sound. The agent's job is only to turn each image or sound into a list of numbers (the *features*) that capture what matters in it.
+
+A fixed evaluator takes those features and uses a simple method called *ridge regression* to guess the brain response. It then compares the guess with the real recorded brain activity and gives back one score, the *Pearson correlation* (1 means a perfect match, 0 means no match). The agent sees only this score, never the real brain data, and uses it to improve its model over several iterations.
+</Box>
+
+The agent writes a model $f$ that takes a [stimulus](https://en.wikipedia.org/wiki/Stimulus_(physiology)) $x$ (such as an image or audio) and converts it into numerical features $f(x)$.
+
+A fixed evaluator then uses these features to fit a [ridge regression](https://en.wikipedia.org/wiki/Ridge_regression) model $W$, which learns to predict the recorded brain responses $y$. It uses this model to predict responses on the visible set using $\hat{y} = W f(x)$, and returns the [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) $r(\hat{y}, y)$ between the predicted responses $\hat{y}$ and the actual responses $y$.
+
+The agent only receives this correlation score. Every candidate model within a dataset is evaluated using the same stimulus split, ridge regression procedure and metric.
+
+There are also some additional constraints:
+- The model cannot read the actual brain responses.
+- A candidate is rejected if it produces $10{,}000$ or more features.
+
+The visual cortex search runs in an isolated sandbox with no network access and no access to the datasets, run directories or repository. The agent can only see its own workspace and receives performance metrics through a restricted interface.
+
+The story-listening fMRI and ECoG experiments do not use this isolated sandbox. Instead, they rely on instructions given in the prompt and a post-run audit to check whether the agent followed the constraints.
+
+### Results
+- Outperformed all seven traditional interpretable models.
+- Performed well on images and subjects it had never seen during the search.
+- Discovered 14 distinct computations involved in processing visual information.
+- Found that different visual areas rely on different features, from edges and surfaces to shapes and feature relationships.
+
+
+## Conclusion
+iWSP uses the idea of weight-space programming, where the frontier LLMs directly read/write the neural network weights, and make this process interpretable for humans to understand.
+
+Of course, this approach has its limitations and hasn't been explored extensively yet, so it's hard to say what the future will look like.
+
+The frontier models are already capable of something that we might never have imagined and they keep getting better at this!!!

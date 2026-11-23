@@ -1,0 +1,55 @@
+---
+interface Props {
+    src: string;
+    caption?: string;
+}
+
+const { src, caption } = Astro.props;
+
+const files = import.meta.glob('/src/content/**/*.svg', { query: '?raw', import: 'default', eager: true });
+
+const key = src.startsWith('/') ? src : src.replace(/^\.\//, '');
+const matchingKey = Object.keys(files).find((k) => k.endsWith(key));
+let svgContent = matchingKey ? (files[matchingKey] as string) : null;
+
+if (svgContent) {
+    // Strip the XML declaration and DOCTYPE (not valid inline)
+    svgContent = svgContent
+        .replace(/<\?xml[^?]*\?>/g, '')
+        .replace(/<!DOCTYPE[^>]*>/g, '');
+
+    // Remove the background rect (Excalidraw bakes in a solid background rect as the first child)
+    // It can be self-closing or have a closing tag
+    svgContent = svgContent.replace(/<rect\s[^>]*x="0"[^>]*y="0"[^>]*>(<\/rect>)?/g, '');
+
+    // Make SVG responsive
+    svgContent = svgContent.replace(
+        /<svg([^>]*)width="[^"]*"([^>]*)height="[^"]*"/,
+        '<svg$1$2'
+    );
+}
+---
+
+{svgContent ? (
+    <figure class="excalidraw-figure not-prose my-10 w-full">
+        <div
+            class="excalidraw-wrap w-full overflow-x-auto"
+            set:html={svgContent}
+        />
+        {caption && (
+            <figcaption class="mt-3 text-center text-xs text-muted-foreground italic">
+                {caption}
+            </figcaption>
+        )}
+    </figure>
+) : (
+    <p class="text-destructive text-sm">Excalidraw: could not load <code>{src}</code></p>
+)}
+
+<style>
+    .excalidraw-wrap :global(svg) {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+</style>

@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import NotePost from '../../layouts/NotePost.astro';
+import Excalidraw from '../../components/Excalidraw.astro';
 
 export async function getStaticPaths() {
     const posts = await getCollection('notes');
@@ -19,5 +20,5 @@ const readingTime = Math.max(1, Math.round(words / 200));
 ---
 
 <NotePost {...post.data} readingTime={readingTime}>
-    <Content />
+    <Content components={{ Excalidraw }} />
 </NotePost>
