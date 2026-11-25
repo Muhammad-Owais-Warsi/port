@@ -1,0 +1,81 @@
+---
+import { FiArrowUpRight } from "react-icons/fi";
+import { BENCHMARKS } from "../../data/benchmarks";
+
+interface Props {
+    heading?: string;
+}
+
+const { heading = "Benchmarks & Research" } = Astro.props;
+---
+
+<section id="benchmarks" class="py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-3xl">
+        <h2
+            class="text-xl sm:text-2xl font-semibold tracking-tight text-foreground mb-4 sm:mb-6"
+        >
+            {heading}
+        </h2>
+
+        <div class="space-y-8 sm:space-y-10">
+            {
+                BENCHMARKS.map((item) => (
+                    <article class="flex flex-col gap-2.5">
+                        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+                            <div class="space-y-0.5">
+                                <div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                                    <a
+                                        href={item.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="group inline-flex items-center gap-1.5 text-sm sm:text-base font-semibold text-foreground hover:text-primary"
+                                    >
+                                        <span>{item.name}</span>
+                                        <FiArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                                    </a>
+                                    {item.subtitle && (
+                                        <span class="text-xs sm:text-sm text-muted-foreground">
+                                            — {item.subtitle}
+                                        </span>
+                                    )}
+                                </div>
+                                {item.orgs && item.orgs.length > 0 && (
+                                    <div class="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-xs text-muted-foreground">
+                                        <span>Built with</span>
+                                        {item.orgs.map((org, i) => (
+                                            <>
+                                                {i > 0 && (
+                                                    <span>
+                                                        {i ===
+                                                        item.orgs!.length - 1
+                                                            ? "&"
+                                                            : ","}
+                                                    </span>
+                                                )}
+                                                <a
+                                                    href={org.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="font-medium text-foreground/80 hover:text-primary underline underline-offset-4 decoration-border hover:decoration-primary"
+                                                >
+                                                    {org.name}
+                                                </a>
+                                            </>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <span class="text-xs font-semibold text-foreground/60 whitespace-nowrap">
+                                {item.date}
+                            </span>
+                        </div>
+
+                        <p class="text-foreground/75 text-sm sm:text-base leading-snug">
+                            {item.description}
+                        </p>
+                    </article>
+                ))
+            }
+        </div>
+    </div>
+</section>

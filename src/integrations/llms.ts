@@ -46,6 +46,76 @@ function parseTsArray(filePath: string, exportName: string): any[] {
     return items;
 }
 
+interface ParsedBenchmark {
+    name: string;
+    date: string;
+    description: string;
+    url: string;
+    orgs: { name: string; url: string }[];
+}
+
+function parseBenchmarks(filePath: string): ParsedBenchmark[] {
+    const content = fs.readFileSync(filePath, "utf-8");
+    const match = content.match(
+        /export const BENCHMARKS:\s*\w+\[\]\s*=\s*(\[[\s\S]*\]);/
+    );
+    if (!match) return [];
+    const raw = match[1];
+
+    // Extract top-level object blocks using brace depth
+    const blocks: string[] = [];
+    let depth = 0;
+    let start = -1;
+    let inString = false;
+    for (let i = 0; i < raw.length; i++) {
+        const ch = raw[i];
+        if (ch === '"' && raw[i - 1] !== "\\") {
+            inString = !inString;
+            continue;
+        }
+        if (inString) continue;
+        if (ch === "{") {
+            if (depth === 0) start = i;
+            depth++;
+        } else if (ch === "}") {
+            depth--;
+            if (depth === 0 && start !== -1) {
+                blocks.push(raw.slice(start, i + 1));
+                start = -1;
+            }
+        }
+    }
+
+    return blocks.map((block) => {
+        const orgsMatch = block.match(/orgs:\s*\[([\s\S]*?)\]/);
+        const withoutOrgs = orgsMatch
+            ? block.replace(orgsMatch[0], "")
+            : block;
+        const getField = (key: string) =>
+            withoutOrgs.match(new RegExp(`${key}:\\s*"([^"]*)"`))?.[1] ?? "";
+
+        const orgs: { name: string; url: string }[] = [];
+        if (orgsMatch) {
+            const orgBlocks = orgsMatch[1].match(/\{[^{}]*\}/g) || [];
+            for (const ob of orgBlocks) {
+                const orgName = ob.match(/name:\s*"([^"]*)"/)?.[1];
+                const orgUrl = ob.match(/url:\s*"([^"]*)"/)?.[1];
+                if (orgName && orgUrl) {
+                    orgs.push({ name: orgName, url: orgUrl });
+                }
+            }
+        }
+
+        return {
+            name: getField("name"),
+            date: getField("date"),
+            description: getField("description"),
+            url: getField("url"),
+            orgs,
+        };
+    });
+}
+
 function formatDate(dateStr: string): string {
     const d = new Date(dateStr);
     return d.toLocaleDateString("en-US", {
@@ -118,6 +188,7 @@ function generateLlmsTxt(): string {
         path.join(srcDir, "data/experience.ts"),
         "EXPERIENCES"
     );
+    const benchmarks = parseBenchmarks(path.join(srcDir, "data/benchmarks.ts"));
 
     const lines: string[] = [];
     lines.push("# Muhammad Owais Warsi — Portfolio & Blog");
@@ -129,7 +200,7 @@ function generateLlmsTxt(): string {
     lines.push("## Site");
     lines.push("");
     lines.push(
-        "- [Home](https://owais.is-a.dev/): Portfolio home page with hero, about, experience, projects, and open source sections."
+        "- [Home](https://owais.is-a.dev/): Portfolio home page with hero, about, experience, benchmarks & research, projects, and open source sections."
     );
     lines.push(
         "- [Blog](https://owais.is-a.dev/blog/): Collection of technical blog posts."
@@ -159,6 +230,24 @@ function generateLlmsTxt(): string {
         const typeSuffix = exp.type ? ` (${exp.type})` : "";
         lines.push(
             `- **${exp.role}** at ${exp.company}${typeSuffix} — ${period}`
+        );
+    }
+    lines.push("");
+    lines.push("## Benchmarks & Research");
+    lines.push("");
+    for (const b of benchmarks) {
+        const orgLinks = b.orgs.map((o) => `[${o.name}](${o.url})`);
+        const builtWith =
+            orgLinks.length > 1
+                ? `Built with ${orgLinks.slice(0, -1).join(", ")} & ${orgLinks[orgLinks.length - 1]}`
+                : orgLinks.length === 1
+                  ? `Built with ${orgLinks[0]}`
+                  : "";
+        const meta = [builtWith, b.date].filter(Boolean).join(", ");
+        const rawDesc = (b.description ?? "").trim();
+        const desc = /[.?!]$/.test(rawDesc) ? rawDesc : `${rawDesc}.`;
+        lines.push(
+            `- **${b.name}**${meta ? ` (${meta})` : ""}: ${desc} [Link](${b.url})`
         );
     }
     lines.push("");
